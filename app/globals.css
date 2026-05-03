@@ -49,8 +49,8 @@
 }
 
 :root {
-  /* Warm slate-50 background */
-  --background: oklch(0.984 0.003 247.858);
+  /* Modern gradient background */
+  --background: linear-gradient(135deg, #f8fafc 0%, #f0f5ff 100%);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
@@ -87,7 +87,7 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
