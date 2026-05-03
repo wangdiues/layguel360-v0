@@ -125,6 +125,24 @@
   }
   body {
     @apply bg-background text-foreground;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(0, 220, 130, 0.1) 0%,
+      rgba(0, 0, 0, 0) 60%
+    );
+    animation: gradient-pulse 10s ease-in-out infinite;
+  }
+
+  @keyframes gradient-pulse {
+    0% {
+      background-size: 100% 100%;
+    }
+    50% {
+      background-size: 150% 150%;
+    }
+    100% {
+      background-size: 100% 100%;
+    }
   }
   html {
     @apply font-sans;

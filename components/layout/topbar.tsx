@@ -7,7 +7,7 @@ import { mockUser } from "@/lib/mock-data";
 
 export function Topbar() {
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-slate-200/50 bg-white/80 px-6 backdrop-blur-lg transition-all duration-300 hover:bg-white/90">
+    <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-slate-200/50 bg-white/80 px-6 backdrop-blur-lg transition-all duration-300 hover:bg-white/90 hover:shadow-[0_0_20px_rgba(0,220,130,0.1)]">
       {/* Left spacer */}
       <div className="flex-1" />
 
