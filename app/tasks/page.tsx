@@ -14,11 +14,12 @@ export default function TasksPage() {
   const projectList = mockProjects.map((p) => ({ id: p.id, title: p.title }));
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50">
       <Sidebar />
-      <main className="flex flex-1 flex-col">
+
+      <div className="lg:pl-72">
         <Topbar />
-        <section className="space-y-6 p-6">
+        <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
           {/* Page header */}
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
@@ -53,8 +54,8 @@ export default function TasksPage() {
 
           {/* Filterable task table — client component */}
           <TasksClient tasks={mockTasks} projects={projectList} />
-        </section>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

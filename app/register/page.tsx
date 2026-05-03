@@ -6,12 +6,6 @@ import { useState } from "react";
 import { FolderKanban, LockKeyhole, Mail, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -26,104 +20,182 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <div className="flex min-h-screen items-center justify-center px-6 py-12">
-        <Card className="w-full max-w-lg rounded-2xl border-slate-200 bg-white shadow-sm">
-          <CardHeader className="space-y-3 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600 text-white">
-              <FolderKanban className="h-6 w-6" />
+    <main className="grid min-h-screen lg:grid-cols-2">
+      {/* ── Left panel: form ── */}
+      <section className="flex flex-col items-center justify-center bg-white px-8 py-16 sm:px-16">
+        <div className="w-full max-w-sm">
+          {/* Brand mark */}
+          <div className="mb-10 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm">
+              <FolderKanban className="h-5 w-5" />
             </div>
-            <div>
-              <CardTitle className="text-2xl font-semibold tracking-tight text-slate-950">
-                Create your ལས་འགུལ་360 account
-              </CardTitle>
-              <p className="mt-2 text-sm text-slate-500">
-                Sign up to start managing projects and tasks.
-              </p>
-            </div>
-          </CardHeader>
+            <span className="text-lg font-semibold tracking-tight text-slate-900">
+              ལས་འགུལ་360
+            </span>
+          </div>
 
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full name</Label>
+          {/* Heading */}
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+              Create an account
+            </h1>
+            <p className="mt-1.5 text-sm text-slate-500">
+              Join ལས་འགུལ་360 and start managing your work.
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Full name */}
+            <div className="space-y-1.5">
+              <Label htmlFor="name" className="text-sm font-medium text-slate-700">
+                Full name
+              </Label>
+              <div className="relative">
+                <UserRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Karma Wangchuk"
+                  className="pl-9 text-sm"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-sm font-medium text-slate-700">
+                Email address
+              </Label>
+              <div className="relative">
+                <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="karma@example.bt"
+                  className="pl-9 text-sm"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Passwords — 2-column grid */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="password" className="text-sm font-medium text-slate-700">
+                  Password
+                </Label>
                 <div className="relative">
-                  <UserRound className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <Input
-                    id="name"
-                    type="text"
-                    placeholder="Karma Wangchuk"
-                    className="pl-9"
+                    id="password"
+                    type="password"
+                    placeholder="Password"
+                    className="pl-9 text-sm"
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email address</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="confirm-password" className="text-sm font-medium text-slate-700">
+                  Confirm
+                </Label>
                 <div className="relative">
-                  <Mail className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <Input
-                    id="email"
-                    type="email"
-                    placeholder="karma@example.bt"
-                    className="pl-9"
+                    id="confirm-password"
+                    type="password"
+                    placeholder="Confirm"
+                    className="pl-9 text-sm"
                     required
                   />
                 </div>
               </div>
+            </div>
 
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <div className="relative">
-                    <LockKeyhole className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="Password"
-                      className="pl-9"
-                      required
-                    />
-                  </div>
-                </div>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:ring-indigo-500"
+            >
+              {loading ? "Creating account…" : "Create account"}
+            </Button>
+          </form>
 
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm password</Label>
-                  <div className="relative">
-                    <LockKeyhole className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                    <Input
-                      id="confirm-password"
-                      type="password"
-                      placeholder="Confirm"
-                      className="pl-9"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
+          <p className="mt-6 text-center text-sm text-slate-500">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-semibold text-indigo-600 hover:text-indigo-700"
+            >
+              Sign in
+            </Link>
+          </p>
+        </div>
+      </section>
 
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-indigo-600 text-white hover:bg-indigo-700"
-              >
-                {loading ? "Creating account..." : "Create account"}
-              </Button>
+      {/* ── Right panel: brand ── */}
+      <section
+        className="relative hidden overflow-hidden lg:flex lg:flex-col lg:justify-between"
+        style={{ backgroundColor: "#0B0F1A" }}
+      >
+        {/* Decorative rings */}
+        <div
+          aria-hidden="true"
+          className="absolute -right-20 -top-20 h-96 w-96 rounded-full border border-white/5 bg-white/[0.02]"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute -left-10 bottom-10 h-64 w-64 rounded-full border border-indigo-600/10 bg-indigo-600/[0.03]"
+        />
 
-              <p className="text-center text-sm text-slate-500">
-                Already have an account?{" "}
-                <Link
-                  href="/login"
-                  className="font-medium text-indigo-600 hover:text-indigo-700"
-                >
-                  Sign in
-                </Link>
-              </p>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+        {/* Inner content — sits above the rings */}
+        <div className="relative z-10 flex h-full flex-col justify-between px-14 py-16">
+          {/* Top: tagline block */}
+          <div>
+            {/* Overline label */}
+            <p className="mb-8 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-400">
+              Built for real work
+            </p>
+
+            {/* Large headline — intentionally mixed sizing */}
+            <h2 className="max-w-xs text-5xl font-bold leading-[1.1] tracking-tight text-white">
+              Built for teams
+              <br />
+              that get{" "}
+              <span className="text-indigo-400">things</span>
+              <br />
+              done.
+            </h2>
+
+            {/* Separator */}
+            <div className="my-10 h-px w-12 bg-white/10" />
+
+            {/* Feature list */}
+            <ul className="space-y-4">
+              {[
+                "Set up projects in minutes",
+                "Assign tasks to your team",
+                "See progress at a glance",
+              ].map((feat) => (
+                <li key={feat} className="flex items-start gap-3">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-500" />
+                  <span className="text-base leading-snug text-slate-300">
+                    {feat}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Bottom: version descriptor */}
+          <p className="text-xs tracking-wide text-slate-600">
+            ལས་འགུལ་360 &mdash; Version 0 &bull; Static Preview
+          </p>
+        </div>
+      </section>
     </main>
   );
 }

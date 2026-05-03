@@ -14,13 +14,12 @@ export default function ProjectsPage() {
   ).length;
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50">
       <Sidebar />
 
-      <main className="flex flex-1 flex-col">
+      <div className="lg:pl-72">
         <Topbar />
-
-        <section className="space-y-6 p-6">
+        <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
               <h1 className="text-2xl font-bold tracking-tight">Projects</h1>
@@ -52,8 +51,8 @@ export default function ProjectsPage() {
           </div>
 
           <ProjectsClient projects={mockProjects} />
-        </section>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
