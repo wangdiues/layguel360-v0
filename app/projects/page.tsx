@@ -1,13 +1,8 @@
-import { Sidebar } from "@/components/layout/sidebar"
-import { Topbar } from "@/components/layout/topbar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import Link from "next/link";
+import { Sidebar } from "@/components/layout/sidebar";
+import { Topbar } from "@/components/layout/topbar";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -15,41 +10,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Plus } from "lucide-react"
-
-const projects = [
-  {
-    name: "Forest Carbon Mapping",
-    description: "Mapping forest carbon stocks and sequestration potential.",
-    status: "Active",
-    priority: "High",
-    dueDate: "30 Jun 2026",
-  },
-  {
-    name: "Cordyceps Collection Monitoring",
-    description: "Monitoring field activities during cordyceps collection season.",
-    status: "Planning",
-    priority: "Medium",
-    dueDate: "15 Jul 2026",
-  },
-  {
-    name: "NWFP Digital Platform",
-    description: "Static website for non-wood forest products and management plans.",
-    status: "Active",
-    priority: "Medium",
-    dueDate: "20 May 2026",
-  },
-  {
-    name: "Human–Elephant Conflict Mapping",
-    description: "Spatial analysis and reporting of elephant conflict risk areas.",
-    status: "On Hold",
-    priority: "Critical",
-    dueDate: "30 Sep 2026",
-  },
-]
+} from "@/components/ui/table";
+import { CreateProjectDialog } from "@/components/projects/CreateProjectDialog";
+import { mockProjects } from "@/lib/mock-data";
 
 export default function ProjectsPage() {
+  const total = mockProjects.length;
+  const active = mockProjects.filter((p) => p.status === "Active").length;
+  const planning = mockProjects.filter((p) => p.status === "Planning").length;
+  const highPriority = mockProjects.filter(
+    (p) => p.priority === "High" || p.priority === "Critical"
+  ).length;
+
   return (
     <div className="flex min-h-screen bg-slate-50">
       <Sidebar />
@@ -65,57 +37,27 @@ export default function ProjectsPage() {
                 Manage project plans, deadlines, priorities, and progress.
               </p>
             </div>
-
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Create Project
-            </Button>
+            <CreateProjectDialog />
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">
-                  Total Projects
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold">4</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">
-                  Active
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold">2</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">
-                  Planning
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold">1</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">
-                  High Priority
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold">2</p>
-              </CardContent>
-            </Card>
+            {[
+              { label: "Total Projects", value: total },
+              { label: "Active", value: active },
+              { label: "Planning", value: planning },
+              { label: "High Priority", value: highPriority },
+            ].map((item) => (
+              <Card key={item.label}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm text-muted-foreground">
+                    {item.label}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold">{item.value}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
           <Card>
@@ -133,11 +75,16 @@ export default function ProjectsPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {projects.map((project) => (
-                    <TableRow key={project.name}>
+                  {mockProjects.map((project) => (
+                    <TableRow key={project.id}>
                       <TableCell>
                         <div>
-                          <p className="font-medium">{project.name}</p>
+                          <Link
+                            href={`/projects/${project.id}`}
+                            className="font-medium hover:text-indigo-600 hover:underline"
+                          >
+                            {project.title}
+                          </Link>
                           <p className="text-sm text-muted-foreground">
                             {project.description}
                           </p>
@@ -149,7 +96,7 @@ export default function ProjectsPage() {
                       <TableCell>
                         <Badge variant="outline">{project.priority}</Badge>
                       </TableCell>
-                      <TableCell>{project.dueDate}</TableCell>
+                      <TableCell>{project.end_date}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -159,5 +106,5 @@ export default function ProjectsPage() {
         </section>
       </main>
     </div>
-  )
+  );
 }

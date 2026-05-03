@@ -1,7 +1,7 @@
-import { Sidebar } from "@/components/layout/sidebar"
-import { Topbar } from "@/components/layout/topbar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Sidebar } from "@/components/layout/sidebar";
+import { Topbar } from "@/components/layout/topbar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -9,28 +9,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-
-const stats = [
-  { title: "Total Projects", value: "12" },
-  { title: "Active Projects", value: "7" },
-  { title: "Pending Tasks", value: "24" },
-  { title: "Completed Tasks", value: "56" },
-]
-
-const recentProjects = [
-  { name: "Forest Carbon Mapping", status: "Active", dueDate: "30 Jun 2026" },
-  { name: "Cordyceps Monitoring", status: "Planning", dueDate: "15 Jul 2026" },
-  { name: "NWFP Website", status: "Active", dueDate: "20 May 2026" },
-]
-
-const recentTasks = [
-  { name: "Prepare database schema", status: "In Progress", priority: "High" },
-  { name: "Design dashboard UI", status: "Review", priority: "Medium" },
-  { name: "Upload project documents", status: "To Do", priority: "Low" },
-]
+} from "@/components/ui/table";
+import { mockProjects, mockTasks } from "@/lib/mock-data";
 
 export default function DashboardPage() {
+  const totalProjects = mockProjects.length;
+  const activeProjects = mockProjects.filter((p) => p.status === "Active").length;
+  const pendingTasks = mockTasks.filter((t) => t.status !== "Completed").length;
+  const completedTasks = mockTasks.filter((t) => t.status === "Completed").length;
+
+  const recentProjects = mockProjects.slice(0, 5);
+  const recentTasks = mockTasks.slice(0, 5);
+
+  const stats = [
+    { title: "Total Projects", value: totalProjects },
+    { title: "Active Projects", value: activeProjects },
+    { title: "Pending Tasks", value: pendingTasks },
+    { title: "Completed Tasks", value: completedTasks },
+  ];
+
   return (
     <div className="flex min-h-screen bg-slate-50">
       <Sidebar />
@@ -77,12 +74,12 @@ export default function DashboardPage() {
                   </TableHeader>
                   <TableBody>
                     {recentProjects.map((project) => (
-                      <TableRow key={project.name}>
-                        <TableCell className="font-medium">{project.name}</TableCell>
+                      <TableRow key={project.id}>
+                        <TableCell className="font-medium">{project.title}</TableCell>
                         <TableCell>
                           <Badge variant="secondary">{project.status}</Badge>
                         </TableCell>
-                        <TableCell>{project.dueDate}</TableCell>
+                        <TableCell>{project.end_date}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -105,8 +102,8 @@ export default function DashboardPage() {
                   </TableHeader>
                   <TableBody>
                     {recentTasks.map((task) => (
-                      <TableRow key={task.name}>
-                        <TableCell className="font-medium">{task.name}</TableCell>
+                      <TableRow key={task.id}>
+                        <TableCell className="font-medium">{task.title}</TableCell>
                         <TableCell>
                           <Badge variant="outline">{task.status}</Badge>
                         </TableCell>
@@ -121,5 +118,5 @@ export default function DashboardPage() {
         </section>
       </main>
     </div>
-  )
+  );
 }
