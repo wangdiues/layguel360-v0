@@ -70,7 +70,7 @@ export default async function TaskDetailPage({
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Sidebar />
 
       <main className="min-h-screen lg:pl-72">

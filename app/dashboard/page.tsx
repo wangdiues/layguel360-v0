@@ -94,7 +94,7 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Sidebar />
 
       <div className="lg:pl-72">

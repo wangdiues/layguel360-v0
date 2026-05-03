@@ -41,7 +41,7 @@ export default async function ProjectDetailPage({
   const progress = tasksTotal > 0 ? Math.round((tasksCompleted / tasksTotal) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Sidebar />
 
       <main className="min-h-screen lg:pl-72">

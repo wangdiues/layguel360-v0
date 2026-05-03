@@ -62,7 +62,7 @@ export default async function TasksPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Sidebar />
 
       <div className="lg:pl-72">
