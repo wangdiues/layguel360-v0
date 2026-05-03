@@ -20,23 +20,23 @@ export default function ProfilePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-background">
       <Sidebar />
 
       <main className="min-h-screen lg:pl-72">
         <Topbar />
 
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border bg-background p-6 shadow-sm">
+          <div className="rounded-2xl border bg-card p-6 shadow-sm">
             <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-4">
                 <Avatar className="h-20 w-20 border">
-                  <AvatarFallback className="bg-indigo-50 text-xl font-semibold text-indigo-700">
+                  <AvatarFallback className="bg-primary/20 text-xl font-semibold text-primary">
                     {mockUser.initials}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h1 className="text-2xl font-semibold tracking-tight">
+                  <h1 className="text-2xl font-semibold tracking-tight text-foreground">
                     {mockUser.name}
                   </h1>
                   <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
@@ -44,7 +44,7 @@ export default function ProfilePage() {
                     <span>{mockUser.email}</span>
                   </div>
                   <div className="mt-3">
-                    <Badge className="rounded-full bg-indigo-50 px-3 py-1 text-indigo-700 hover:bg-indigo-50">
+                    <Badge className="rounded-full bg-primary/10 px-3 py-1 text-primary hover:bg-primary/10">
                       {mockUser.role}
                     </Badge>
                   </div>

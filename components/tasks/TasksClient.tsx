@@ -20,10 +20,13 @@ type Task = {
   id: string;
   project_id: string;
   title: string;
+  description: string | null;
   status: string;
   priority: string;
-  due_date: string;
-  assignee: string;
+  due_date: string | null;
+  assignee: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 type Project = {
@@ -134,7 +137,7 @@ export function TasksClient({ tasks, projects }: Props) {
                       <StatusBadge value={task.priority} type="priority" />
                     </TableCell>
                     <TableCell className="text-sm text-slate-600">
-                      {task.due_date}
+                      {task.due_date || "—"}
                     </TableCell>
                   </TableRow>
                 );

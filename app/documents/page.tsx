@@ -77,7 +77,7 @@ const stats = [
 
 export default function DocumentsPage() {
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-background">
       <Sidebar />
 
       <main className="min-h-screen lg:pl-72">
@@ -86,7 +86,7 @@ export default function DocumentsPage() {
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
-              <h1 className="text-2xl font-semibold tracking-tight">
+              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
                 Documents
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -94,7 +94,7 @@ export default function DocumentsPage() {
               </p>
             </div>
 
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700">
+            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
               <Plus className="mr-2 h-4 w-4" />
               Upload Document
             </Button>
@@ -128,7 +128,7 @@ export default function DocumentsPage() {
                     className="flex flex-col gap-3 rounded-2xl border bg-background p-4 sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div className="flex items-start gap-3">
-                      <div className="rounded-xl bg-indigo-50 p-2 text-indigo-700">
+                      <div className="rounded-xl bg-primary/10 p-2 text-primary">
                         <Icon className="h-5 w-5" />
                       </div>
                       <div>

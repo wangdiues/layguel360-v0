@@ -10,12 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { CalendarDays, ChevronRight, FolderKanban, User } from "lucide-react";
-import {
-  mockTasks,
-  mockProjects,
-  mockComments,
-  mockAttachments,
-} from "@/lib/mock-data";
+import { getTask, getProject, getComments, getAttachments, Comment, Attachment, Task, Project } from "@/lib/supabase/data";
 
 export default async function TaskDetailPage({
   params,
@@ -24,12 +19,25 @@ export default async function TaskDetailPage({
 }) {
   const { taskId } = await params;
 
-  const task = mockTasks.find((t) => t.id === taskId);
-  if (!task) notFound();
+  let task: Task | null = null;
+  let project: Project | null = null;
+  let comments: Comment[] = [];
+  let attachments: Attachment[] = [];
 
-  const project = mockProjects.find((p) => p.id === task.project_id);
-  const comments = mockComments[taskId] ?? [];
-  const attachments = mockAttachments[taskId] ?? [];
+  try {
+    [task, comments, attachments] = await Promise.all([
+      getTask(taskId),
+      getComments(taskId),
+      getAttachments(taskId),
+    ]);
+    if (task) {
+      project = await getProject(task.project_id);
+    }
+  } catch (e) {
+    console.error("Failed to fetch task:", e);
+  }
+
+  if (!task) notFound();
 
   const created = new Date(task.created_at).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -45,7 +53,6 @@ export default async function TaskDetailPage({
         <Topbar />
 
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
           <nav className="flex items-center gap-1.5">
             <Link
               href="/tasks"
@@ -81,7 +88,7 @@ export default async function TaskDetailPage({
                   {task.title}
                 </h1>
                 <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
-                  {task.description}
+                  {task.description || "No description"}
                 </p>
               </div>
             </div>
@@ -121,7 +128,7 @@ export default async function TaskDetailPage({
                           Due Date
                         </TableCell>
                         <TableCell className="font-medium">
-                          {task.due_date}
+                          {task.due_date || "—"}
                         </TableCell>
                       </TableRow>
                       <TableRow>
@@ -137,7 +144,7 @@ export default async function TaskDetailPage({
                           Assignee
                         </TableCell>
                         <TableCell className="font-medium">
-                          {task.assignee}
+                          {task.assignee || "—"}
                         </TableCell>
                       </TableRow>
                       <TableRow>
@@ -165,7 +172,7 @@ export default async function TaskDetailPage({
                     <CalendarDays className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <p className="text-sm text-muted-foreground">Due Date</p>
-                      <p className="font-medium">{task.due_date}</p>
+                      <p className="font-medium">{task.due_date || "—"}</p>
                     </div>
                   </div>
                   <Separator />
@@ -181,7 +188,7 @@ export default async function TaskDetailPage({
                     <User className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <p className="text-sm text-muted-foreground">Assignee</p>
-                      <p className="font-medium">{task.assignee}</p>
+                      <p className="font-medium">{task.assignee || "—"}</p>
                     </div>
                   </div>
                 </CardContent>

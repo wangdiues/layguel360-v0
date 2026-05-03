@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
@@ -28,18 +29,23 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full flex-col" style={{ background: "#0B0F1A" }}>
+    <div className="flex h-full flex-col bg-sidebar">
       {/* Brand */}
-      <div className="border-b border-white/[0.05] px-5 py-5">
+      <div className="border-b border-sidebar-border px-5 py-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 shadow-lg shadow-indigo-600/40">
-            <FolderKanban className="h-4 w-4 text-white" />
+          <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-xl">
+            <Image
+              src="/logo.png"
+              alt="ལས་འགུལ་360"
+              fill
+              className="object-cover"
+            />
           </div>
           <div>
-            <p className="text-sm font-bold leading-tight tracking-tight text-white">
+            <p className="text-sm font-bold leading-tight tracking-tight text-sidebar-foreground">
               ལས་འགུལ་360
             </p>
-            <p className="mt-0.5 text-[11px] font-medium leading-tight text-slate-500">
+            <p className="mt-0.5 text-[11px] font-medium leading-tight text-muted-foreground">
               Project Management
             </p>
           </div>
@@ -48,7 +54,7 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-slate-600">
+        <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
           Main Menu
         </p>
         <div className="space-y-0.5">
@@ -65,21 +71,21 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
                 className={cn(
                   "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150",
                   isActive
-                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-900/60"
-                    : "text-slate-400 hover:bg-white/[0.05] hover:text-slate-100"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 )}
               >
                 <Icon
                   className={cn(
                     "h-4 w-4 shrink-0 transition-colors",
                     isActive
-                      ? "text-white"
-                      : "text-slate-500 group-hover:text-slate-300"
+                      ? "text-primary-foreground"
+                      : "text-muted-foreground group-hover:text-sidebar-accent-foreground"
                   )}
                 />
                 {item.name}
                 {isActive && (
-                  <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white/60" />
+                  <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary-foreground/60" />
                 )}
               </Link>
             );
@@ -88,23 +94,23 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
       </nav>
 
       {/* User */}
-      <div className="border-t border-white/[0.05] p-3">
+      <div className="border-t border-sidebar-border p-3">
         <div className="flex items-center gap-3 rounded-xl px-3 py-2.5">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-600/15 text-xs font-bold text-indigo-400 ring-1 ring-indigo-600/20">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary ring-1 ring-primary/20">
             {mockUser.initials}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold leading-tight text-slate-200">
+            <p className="truncate text-sm font-semibold leading-tight text-sidebar-foreground">
               {mockUser.name}
             </p>
-            <p className="mt-0.5 truncate text-[11px] leading-tight text-slate-500">
+            <p className="mt-0.5 truncate text-[11px] leading-tight text-muted-foreground">
               {mockUser.role}
             </p>
           </div>
           <Link
             href="/login"
             onClick={onLinkClick}
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-white/[0.06] hover:text-slate-400"
+            className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             title="Sign out"
           >
             <LogOut className="h-3.5 w-3.5" />
@@ -123,11 +129,10 @@ export function Sidebar() {
       {/* Mobile trigger */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed left-4 top-4 z-50 flex h-9 w-9 items-center justify-center rounded-xl shadow-lg lg:hidden"
-        style={{ background: "#0B0F1A" }}
+        className="fixed left-4 top-4 z-50 flex h-9 w-9 items-center justify-center rounded-xl shadow-lg lg:hidden bg-sidebar"
         aria-label="Open menu"
       >
-        <Menu className="h-4 w-4 text-white" />
+        <Menu className="h-4 w-4 text-sidebar-foreground" />
       </button>
 
       {/* Mobile drawer */}

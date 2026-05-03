@@ -3,15 +3,27 @@ import { Topbar } from "@/components/layout/topbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreateTaskDialog } from "@/components/tasks/CreateTaskDialog";
 import { TasksClient } from "@/components/tasks/TasksClient";
-import { mockTasks, mockProjects } from "@/lib/mock-data";
+import { getTasks, getProjects, Task, Project } from "@/lib/supabase/data";
 
-export default function TasksPage() {
-  const total = mockTasks.length;
-  const pending = mockTasks.filter((t) => t.status === "Pending").length;
-  const inProgress = mockTasks.filter((t) => t.status === "In Progress").length;
-  const completed = mockTasks.filter((t) => t.status === "Completed").length;
+export default async function TasksPage() {
+  let tasks: Task[] = [];
+  let projects: Project[] = [];
+  let total = 0;
+  let pending = 0;
+  let inProgress = 0;
+  let completed = 0;
 
-  const projectList = mockProjects.map((p) => ({ id: p.id, title: p.title }));
+  try {
+    [tasks, projects] = await Promise.all([getTasks(), getProjects()]);
+    total = tasks.length;
+    pending = tasks.filter((t) => t.status === "Pending").length;
+    inProgress = tasks.filter((t) => t.status === "In Progress").length;
+    completed = tasks.filter((t) => t.status === "Completed").length;
+  } catch (e) {
+    console.error("Failed to fetch data:", e);
+  }
+
+  const projectList = projects.map((p) => ({ id: p.id, title: p.title }));
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -20,7 +32,6 @@ export default function TasksPage() {
       <div className="lg:pl-72">
         <Topbar />
         <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-          {/* Page header */}
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
               <h1 className="text-2xl font-bold tracking-tight">Tasks</h1>
@@ -31,7 +42,6 @@ export default function TasksPage() {
             <CreateTaskDialog projects={projectList} />
           </div>
 
-          {/* Stats cards */}
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {[
               { label: "Total Tasks", value: total },
@@ -52,8 +62,7 @@ export default function TasksPage() {
             ))}
           </div>
 
-          {/* Filterable task table — client component */}
-          <TasksClient tasks={mockTasks} projects={projectList} />
+          <TasksClient tasks={tasks} projects={projectList} />
         </main>
       </div>
     </div>

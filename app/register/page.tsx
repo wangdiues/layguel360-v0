@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FolderKanban, LockKeyhole, Mail, UserRound } from "lucide-react";
+import { LockKeyhole, Mail, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,24 +23,29 @@ export default function RegisterPage() {
   return (
     <main className="grid min-h-screen lg:grid-cols-2">
       {/* ── Left panel: form ── */}
-      <section className="flex flex-col items-center justify-center bg-white px-8 py-16 sm:px-16">
+      <section className="flex flex-col items-center justify-center bg-card px-8 py-16 sm:px-16">
         <div className="w-full max-w-sm">
           {/* Brand mark */}
           <div className="mb-10 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm">
-              <FolderKanban className="h-5 w-5" />
+            <div className="relative h-10 w-10 overflow-hidden rounded-xl">
+              <Image
+                src="/logo.png"
+                alt="ལས་འགུལ་360"
+                fill
+                className="object-cover"
+              />
             </div>
-            <span className="text-lg font-semibold tracking-tight text-slate-900">
+            <span className="text-lg font-semibold tracking-tight text-foreground">
               ལས་འགུལ་360
             </span>
           </div>
 
           {/* Heading */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               Create an account
             </h1>
-            <p className="mt-1.5 text-sm text-slate-500">
+            <p className="mt-1.5 text-sm text-muted-foreground">
               Join ལས་འགུལ་360 and start managing your work.
             </p>
           </div>
@@ -48,16 +54,16 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Full name */}
             <div className="space-y-1.5">
-              <Label htmlFor="name" className="text-sm font-medium text-slate-700">
+              <Label htmlFor="name" className="text-sm font-medium text-foreground">
                 Full name
               </Label>
               <div className="relative">
-                <UserRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <UserRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="name"
                   type="text"
                   placeholder="Karma Wangchuk"
-                  className="pl-9 text-sm"
+                  className="pl-9 text-sm bg-background"
                   required
                 />
               </div>
@@ -65,16 +71,16 @@ export default function RegisterPage() {
 
             {/* Email */}
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-sm font-medium text-slate-700">
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">
                 Email address
               </Label>
               <div className="relative">
-                <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="karma@example.bt"
-                  className="pl-9 text-sm"
+                  className="pl-9 text-sm bg-background"
                   required
                 />
               </div>
@@ -83,32 +89,32 @@ export default function RegisterPage() {
             {/* Passwords — 2-column grid */}
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="password" className="text-sm font-medium text-slate-700">
+                <Label htmlFor="password" className="text-sm font-medium text-foreground">
                   Password
                 </Label>
                 <div className="relative">
-                  <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="password"
                     type="password"
                     placeholder="Password"
-                    className="pl-9 text-sm"
+                    className="pl-9 text-sm bg-background"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="confirm-password" className="text-sm font-medium text-slate-700">
+                <Label htmlFor="confirm-password" className="text-sm font-medium text-foreground">
                   Confirm
                 </Label>
                 <div className="relative">
-                  <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="confirm-password"
                     type="password"
                     placeholder="Confirm"
-                    className="pl-9 text-sm"
+                    className="pl-9 text-sm bg-background"
                     required
                   />
                 </div>
@@ -118,17 +124,17 @@ export default function RegisterPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:ring-indigo-500"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
             >
               {loading ? "Creating account…" : "Create account"}
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-500">
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-semibold text-indigo-600 hover:text-indigo-700"
+              className="font-semibold text-primary hover:text-primary/80"
             >
               Sign in
             </Link>
@@ -139,16 +145,16 @@ export default function RegisterPage() {
       {/* ── Right panel: brand ── */}
       <section
         className="relative hidden overflow-hidden lg:flex lg:flex-col lg:justify-between"
-        style={{ backgroundColor: "#0B0F1A" }}
+        style={{ background: "linear-gradient(180deg, #0a0a0f 0%, #0f1014 50%, #13131a 100%)" }}
       >
         {/* Decorative rings */}
         <div
           aria-hidden="true"
-          className="absolute -right-20 -top-20 h-96 w-96 rounded-full border border-white/5 bg-white/[0.02]"
+          className="absolute -right-20 -top-20 h-96 w-96 rounded-full border border-primary/5 bg-primary/[0.02]"
         />
         <div
           aria-hidden="true"
-          className="absolute -left-10 bottom-10 h-64 w-64 rounded-full border border-indigo-600/10 bg-indigo-600/[0.03]"
+          className="absolute -left-10 bottom-10 h-64 w-64 rounded-full border border-primary/10 bg-primary/[0.03]"
         />
 
         {/* Inner content — sits above the rings */}
@@ -156,22 +162,22 @@ export default function RegisterPage() {
           {/* Top: tagline block */}
           <div>
             {/* Overline label */}
-            <p className="mb-8 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-400">
+            <p className="mb-8 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
               Built for real work
             </p>
 
             {/* Large headline — intentionally mixed sizing */}
-            <h2 className="max-w-xs text-5xl font-bold leading-[1.1] tracking-tight text-white">
+            <h2 className="max-w-xs text-5xl font-bold leading-[1.1] tracking-tight text-foreground">
               Built for teams
               <br />
               that get{" "}
-              <span className="text-indigo-400">things</span>
+              <span className="text-primary">things</span>
               <br />
               done.
             </h2>
 
             {/* Separator */}
-            <div className="my-10 h-px w-12 bg-white/10" />
+            <div className="my-10 h-px w-12 bg-border" />
 
             {/* Feature list */}
             <ul className="space-y-4">
@@ -181,8 +187,8 @@ export default function RegisterPage() {
                 "See progress at a glance",
               ].map((feat) => (
                 <li key={feat} className="flex items-start gap-3">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-500" />
-                  <span className="text-base leading-snug text-slate-300">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  <span className="text-base leading-snug text-muted-foreground">
                     {feat}
                   </span>
                 </li>
@@ -191,7 +197,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Bottom: version descriptor */}
-          <p className="text-xs tracking-wide text-slate-600">
+          <p className="text-xs tracking-wide text-muted-foreground">
             ལས་འགུལ་360 &mdash; Version 0 &bull; Static Preview
           </p>
         </div>

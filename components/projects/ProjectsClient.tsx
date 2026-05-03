@@ -18,13 +18,13 @@ import { StatusBadge } from "@/components/ui/status-badge";
 type Project = {
   id: string;
   title: string;
-  description: string;
+  description: string | null;
   status: string;
   priority: string;
-  start_date: string;
-  end_date: string;
-  department: string;
-  manager: string;
+  start_date: string | null;
+  end_date: string | null;
+  department: string | null;
+  manager: string | null;
 };
 
 type Props = {
@@ -39,7 +39,7 @@ export function ProjectsClient({ projects }: Props) {
     if (!q) return true;
     return (
       p.title.toLowerCase().includes(q) ||
-      p.description.toLowerCase().includes(q)
+      (p.description?.toLowerCase().includes(q) ?? false)
     );
   });
 
@@ -95,7 +95,7 @@ export function ProjectsClient({ projects }: Props) {
                         {project.title}
                       </Link>
                       <p className="mt-0.5 text-sm text-muted-foreground line-clamp-1">
-                        {project.description}
+                        {project.description || "No description"}
                       </p>
                     </div>
                   </TableCell>

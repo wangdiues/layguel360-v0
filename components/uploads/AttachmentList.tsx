@@ -9,8 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 type Attachment = {
   id: string;
   filename: string;
-  file_type: string;
-  file_size: string;
+  file_type: string | null;
+  file_size: string | null;
   created_at: string;
 };
 
@@ -106,7 +106,7 @@ export function AttachmentList({ initialAttachments }: Props) {
                 <div>
                   <p className="font-medium">{attachment.filename}</p>
                   <p className="text-sm text-muted-foreground">
-                    {attachment.file_type} · {attachment.file_size}
+                    {attachment.file_type || "File"} · {attachment.file_size || "—"}
                   </p>
                 </div>
               </div>

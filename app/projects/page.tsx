@@ -3,15 +3,26 @@ import { Topbar } from "@/components/layout/topbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreateProjectDialog } from "@/components/projects/CreateProjectDialog";
 import { ProjectsClient } from "@/components/projects/ProjectsClient";
-import { mockProjects } from "@/lib/mock-data";
+import { getProjects, Project } from "@/lib/supabase/data";
 
-export default function ProjectsPage() {
-  const total = mockProjects.length;
-  const active = mockProjects.filter((p) => p.status === "Active").length;
-  const planning = mockProjects.filter((p) => p.status === "Planning").length;
-  const highPriority = mockProjects.filter(
-    (p) => p.priority === "High" || p.priority === "Critical"
-  ).length;
+export default async function ProjectsPage() {
+  let projects: Project[] = [];
+  let total = 0;
+  let active = 0;
+  let planning = 0;
+  let highPriority = 0;
+
+  try {
+    projects = await getProjects();
+    total = projects.length;
+    active = projects.filter((p) => p.status === "Active").length;
+    planning = projects.filter((p) => p.status === "Planning").length;
+    highPriority = projects.filter(
+      (p) => p.priority === "High" || p.priority === "Critical"
+    ).length;
+  } catch (e) {
+    console.error("Failed to fetch projects:", e);
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -50,7 +61,7 @@ export default function ProjectsPage() {
             ))}
           </div>
 
-          <ProjectsClient projects={mockProjects} />
+          <ProjectsClient projects={projects} />
         </main>
       </div>
     </div>

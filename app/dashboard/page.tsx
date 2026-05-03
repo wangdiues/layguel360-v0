@@ -86,7 +86,7 @@ export default async function DashboardPage() {
                 Hey Karma 👋
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">
-                Here's what's happening across your projects today.
+                Here&apos;s what&apos;s happening across your projects today.
               </p>
             </div>
             <Button className="w-fit gap-2">
@@ -174,7 +174,7 @@ export default async function DashboardPage() {
                               </Link>
                             </TableCell>
                             <TableCell>
-                              <Badge variant={project.status.toLowerCase() as any} className="capitalize">
+                              <Badge variant="outline" className="capitalize">
                                 {project.status}
                               </Badge>
                             </TableCell>
@@ -220,7 +220,7 @@ export default async function DashboardPage() {
                             {task.title}
                           </p>
                           <div className="mt-1.5 flex items-center gap-2">
-                            <Badge variant={task.priority.toLowerCase() as any} className="capitalize">
+                            <Badge variant="outline" className="capitalize">
                               {task.priority}
                             </Badge>
                             <span className="text-xs text-muted-foreground">

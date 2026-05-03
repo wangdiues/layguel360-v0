@@ -14,7 +14,7 @@ import {
   FolderKanban,
   User,
 } from "lucide-react";
-import { mockProjects, mockTasks } from "@/lib/mock-data";
+import { getProject, getTasks, Task } from "@/lib/supabase/data";
 
 export default async function ProjectDetailPage({
   params,
@@ -23,14 +23,21 @@ export default async function ProjectDetailPage({
 }) {
   const { projectId } = await params;
 
-  const project = mockProjects.find((p) => p.id === projectId);
+  let project = null;
+  let tasks: Task[] = [];
+
+  try {
+    [project, tasks] = await Promise.all([getProject(projectId), getTasks(projectId)]);
+  } catch (e) {
+    console.error("Failed to fetch project:", e);
+  }
+
   if (!project) notFound();
 
-  const tasks = mockTasks.filter((t) => t.project_id === projectId);
-  const tasksTotal = tasks.length;
-  const tasksCompleted = tasks.filter((t) => t.status === "Completed").length;
-  const progress =
-    tasksTotal > 0 ? Math.round((tasksCompleted / tasksTotal) * 100) : 0;
+  const projectTasks = tasks.filter((t) => t.project_id === projectId);
+  const tasksTotal = projectTasks.length;
+  const tasksCompleted = projectTasks.filter((t) => t.status === "Completed").length;
+  const progress = tasksTotal > 0 ? Math.round((tasksCompleted / tasksTotal) * 100) : 0;
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -40,7 +47,6 @@ export default async function ProjectDetailPage({
         <Topbar />
 
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
           <nav className="flex items-center gap-1.5">
             <Link
               href="/projects"
@@ -64,7 +70,7 @@ export default async function ProjectDetailPage({
                   {project.title}
                 </h1>
                 <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
-                  {project.description}
+                  {project.description || "No description"}
                 </p>
               </div>
             </div>
@@ -84,12 +90,12 @@ export default async function ProjectDetailPage({
                   </span>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {tasks.length === 0 && (
+                  {projectTasks.length === 0 && (
                     <p className="py-6 text-center text-sm text-muted-foreground">
                       No tasks yet.
                     </p>
                   )}
-                  {tasks.map((task) => (
+                  {projectTasks.map((task) => (
                     <Link key={task.id} href={`/tasks/${task.id}`}>
                       <div className="flex flex-col gap-3 rounded-2xl border bg-background p-4 transition-colors hover:bg-muted/30 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-start gap-3">
@@ -101,7 +107,7 @@ export default async function ProjectDetailPage({
                           <div>
                             <p className="font-medium">{task.title}</p>
                             <p className="mt-1 text-sm text-muted-foreground">
-                              {task.assignee} · Due {task.due_date}
+                              {task.assignee || "Unassigned"} · Due {task.due_date || "—"}
                             </p>
                           </div>
                         </div>
@@ -136,7 +142,7 @@ export default async function ProjectDetailPage({
                     <CalendarDays className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <p className="text-sm text-muted-foreground">Start Date</p>
-                      <p className="font-medium">{project.start_date}</p>
+                      <p className="font-medium">{project.start_date || "—"}</p>
                     </div>
                   </div>
                   <Separator />
@@ -144,7 +150,7 @@ export default async function ProjectDetailPage({
                     <CalendarDays className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <p className="text-sm text-muted-foreground">End Date</p>
-                      <p className="font-medium">{project.end_date}</p>
+                      <p className="font-medium">{project.end_date || "—"}</p>
                     </div>
                   </div>
                   <Separator />
@@ -152,7 +158,7 @@ export default async function ProjectDetailPage({
                     <User className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <p className="text-sm text-muted-foreground">Project Manager</p>
-                      <p className="font-medium">{project.manager}</p>
+                      <p className="font-medium">{project.manager || "—"}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -164,7 +170,7 @@ export default async function ProjectDetailPage({
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm leading-6 text-muted-foreground">
-                    {project.department}
+                    {project.department || "—"}
                   </p>
                 </CardContent>
               </Card>
