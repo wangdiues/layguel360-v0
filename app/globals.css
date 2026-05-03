@@ -45,43 +45,49 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-primary: 0 0 20px rgba(0, 220, 130, 0.1);
+  --shadow-primary-lg: 0 0 30px rgba(0, 220, 130, 0.2);
 }
 
 :root {
-  /* Clean professional light theme — indigo / slate */
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #4f46e5;
-  --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #334155;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #eef2ff;
-  --accent-foreground: #4338ca;
+  /* NVIDIA-inspired dark theme */
+  --background: #0a0a0f;
+  --foreground: #e5e5e5;
+  --card: #18181c;
+  --card-foreground: #e5e5e5;
+  --popover: #1c1c24;
+  --popover-foreground: #e5e5e5;
+  --primary: #00dc82;
+  --primary-foreground: #0a0a0f;
+  --secondary: #23232a;
+  --secondary-foreground: #e5e5e5;
+  --muted: #1c1c24;
+  --muted-foreground: #8b8b96;
+  --accent: #00dc82;
+  --accent-foreground: #0a0a0f;
   --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #4f46e5;
-  --chart-1: #4f46e5;
-  --chart-2: #0ea5e9;
-  --chart-3: #f59e0b;
-  --chart-4: #10b981;
-  --chart-5: #f43f5e;
-  --radius: 0.625rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #0f172a;
-  --sidebar-primary: #4f46e5;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #eef2ff;
-  --sidebar-accent-foreground: #4338ca;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #4f46e5;
+  --destructive-foreground: #e5e5e5;
+  --border: #2a2a32;
+  --input: #1c1c24;
+  --ring: #00dc82;
+  --chart-1: #00dc82;
+  --chart-2: #00b8ff;
+  --chart-3: #ffb800;
+  --chart-4: #ff5c00;
+  --chart-5: #a855f7;
+  --radius: 0.5rem;
+  --sidebar: #0a0a0f;
+  --sidebar-foreground: #e5e5e5;
+  --sidebar-primary: #00dc82;
+  --sidebar-primary-foreground: #0a0a0f;
+  --sidebar-accent: #1c1c24;
+  --sidebar-accent-foreground: #e5e5e5;
+  --sidebar-border: #2a2a32;
+  --sidebar-ring: #00dc82;
 }
 
 @layer base {
@@ -90,8 +96,20 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    background-color: var(--background);
+    background-image: radial-gradient(
+      ellipse at center top,
+      rgba(0, 220, 130, 0.07) 0%,
+      transparent 60%
+    );
+    @apply text-foreground antialiased;
+    animation: gradient-pulse 10s ease-in-out infinite;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  @keyframes gradient-pulse {
+    0%, 100% { background-size: 100% 100%; }
+    50% { background-size: 140% 140%; }
   }
 
   *:focus-visible {
@@ -104,31 +122,31 @@
   }
 }
 
-/* Subtle ambient background blobs */
-@keyframes drift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(18px, -26px) scale(1.04); }
-  66% { transform: translate(-12px, 14px) scale(0.97); }
+/* Gradient border utility */
+.gradient-border {
+  position: relative;
+  background: var(--card);
+  border-radius: var(--radius-lg);
 }
 
-/* Thin custom scrollbar */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 220, 130, 0.3), transparent, rgba(0, 220, 130, 0.1));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #3a3a42; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #4a4a52; }
 
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -137,4 +155,5 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  body { animation: none; }
 }

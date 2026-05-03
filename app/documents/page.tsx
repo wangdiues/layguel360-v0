@@ -25,8 +25,8 @@ const documents = [
     uploadedBy: "Karma Wangchuk",
     uploadDate: "28 Apr 2026",
     icon: FileText,
-    iconColor: "text-red-600",
-    iconBg: "bg-red-50",
+    iconColor: "text-red-400",
+    iconBg: "bg-red-500/10",
   },
   {
     id: 2,
@@ -37,8 +37,8 @@ const documents = [
     uploadedBy: "Pema Lhamo",
     uploadDate: "25 Apr 2026",
     icon: FileSpreadsheet,
-    iconColor: "text-emerald-600",
-    iconBg: "bg-emerald-50",
+    iconColor: "text-emerald-400",
+    iconBg: "bg-emerald-500/10",
   },
   {
     id: 3,
@@ -49,8 +49,8 @@ const documents = [
     uploadedBy: "Wangdi",
     uploadDate: "20 Apr 2026",
     icon: FileArchive,
-    iconColor: "text-amber-600",
-    iconBg: "bg-amber-50",
+    iconColor: "text-amber-400",
+    iconBg: "bg-amber-500/10",
   },
   {
     id: 4,
@@ -61,8 +61,8 @@ const documents = [
     uploadedBy: "Tshering Dorji",
     uploadDate: "18 Apr 2026",
     icon: FileText,
-    iconColor: "text-red-600",
-    iconBg: "bg-red-50",
+    iconColor: "text-red-400",
+    iconBg: "bg-red-500/10",
   },
   {
     id: 5,
@@ -73,16 +73,16 @@ const documents = [
     uploadedBy: "Sonam Tobgay",
     uploadDate: "15 Apr 2026",
     icon: FileSpreadsheet,
-    iconColor: "text-emerald-600",
-    iconBg: "bg-emerald-50",
+    iconColor: "text-emerald-400",
+    iconBg: "bg-emerald-500/10",
   },
 ];
 
 const stats = [
-  { label: "Total Documents", value: "5", icon: Files, iconColor: "text-indigo-600", iconBg: "bg-indigo-50", border: "border-l-indigo-500" },
-  { label: "Total Size", value: "26.3 MB", icon: HardDrive, iconColor: "text-sky-600", iconBg: "bg-sky-50", border: "border-l-sky-500" },
-  { label: "Projects Covered", value: "4", icon: FolderKanban, iconColor: "text-violet-600", iconBg: "bg-violet-50", border: "border-l-violet-500" },
-  { label: "Uploaded This Month", value: "5", icon: CalendarDays, iconColor: "text-emerald-600", iconBg: "bg-emerald-50", border: "border-l-emerald-500" },
+  { label: "Total Documents", value: "5",      icon: Files,        iconColor: "text-primary",      iconBg: "bg-primary/10",       border: "border-l-primary" },
+  { label: "Total Size",      value: "26.3 MB", icon: HardDrive,    iconColor: "text-sky-400",      iconBg: "bg-sky-500/10",       border: "border-l-sky-500" },
+  { label: "Projects Covered",value: "4",       icon: FolderKanban, iconColor: "text-violet-400",   iconBg: "bg-violet-500/10",    border: "border-l-violet-500" },
+  { label: "This Month",      value: "5",       icon: CalendarDays, iconColor: "text-emerald-400",  iconBg: "bg-emerald-500/10",   border: "border-l-emerald-500" },
 ];
 
 export default function DocumentsPage() {
@@ -103,7 +103,7 @@ export default function DocumentsPage() {
                 Project files, reports, and supporting attachments.
               </p>
             </div>
-            <Button className="w-fit gap-2 shadow-sm">
+            <Button className="w-fit gap-2">
               <Plus className="h-4 w-4" />
               Upload Document
             </Button>
@@ -183,7 +183,7 @@ export default function DocumentsPage() {
                             {doc.uploadDate}
                           </p>
                         </div>
-                        <button className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                        <button className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
                           <Download className="h-4 w-4" />
                         </button>
                       </div>

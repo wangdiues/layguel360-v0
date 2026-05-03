@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -52,7 +51,8 @@ export default async function DashboardPage() {
 
   const recentProjects = projects.slice(0, 5);
   const activeTasks = tasks.filter((t) => t.status !== "Completed").slice(0, 5);
-  const pendingTasks = stats.totalTasks - stats.completedTasks - stats.inProgressTasks;
+  const pendingTasks =
+    stats.totalTasks - stats.completedTasks - stats.inProgressTasks;
 
   const statCards = [
     {
@@ -60,17 +60,17 @@ export default async function DashboardPage() {
       value: stats.totalProjects,
       sub: `${stats.activeProjects} active`,
       icon: FolderKanban,
-      iconColor: "text-indigo-600",
-      iconBg: "bg-indigo-50",
-      border: "border-l-indigo-500",
+      iconColor: "text-primary",
+      iconBg: "bg-primary/10",
+      border: "border-l-primary",
     },
     {
       title: "Active Projects",
       value: stats.activeProjects,
       sub: "Running now",
       icon: TrendingUp,
-      iconColor: "text-sky-600",
-      iconBg: "bg-sky-50",
+      iconColor: "text-sky-400",
+      iconBg: "bg-sky-500/10",
       border: "border-l-sky-500",
     },
     {
@@ -78,8 +78,8 @@ export default async function DashboardPage() {
       value: pendingTasks,
       sub: "Needs attention",
       icon: Clock,
-      iconColor: "text-amber-600",
-      iconBg: "bg-amber-50",
+      iconColor: "text-amber-400",
+      iconBg: "bg-amber-500/10",
       border: "border-l-amber-500",
     },
     {
@@ -87,8 +87,8 @@ export default async function DashboardPage() {
       value: stats.completedTasks,
       sub: "All time",
       icon: CheckCircle2,
-      iconColor: "text-emerald-600",
-      iconBg: "bg-emerald-50",
+      iconColor: "text-emerald-400",
+      iconBg: "bg-emerald-500/10",
       border: "border-l-emerald-500",
     },
   ];
@@ -111,7 +111,7 @@ export default async function DashboardPage() {
                 Here&apos;s what&apos;s happening across your projects today.
               </p>
             </div>
-            <Button className="w-fit gap-2 shadow-sm">
+            <Button className="w-fit gap-2">
               <Plus className="h-4 w-4" />
               New Project
             </Button>
@@ -124,7 +124,7 @@ export default async function DashboardPage() {
               return (
                 <Card
                   key={stat.title}
-                  className={`rounded-xl border border-border border-l-4 ${stat.border} bg-card shadow-sm transition-all duration-200 hover:shadow-md`}
+                  className={`rounded-xl border border-border border-l-4 ${stat.border} bg-card shadow-sm transition-all duration-200 hover:shadow-lg hover:shadow-primary/5`}
                 >
                   <CardContent className="p-5">
                     <div className="flex items-start justify-between gap-3">

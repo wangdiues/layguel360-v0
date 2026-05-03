@@ -62,7 +62,7 @@ export default function RegisterPage() {
                   id="name"
                   type="text"
                   placeholder="Karma Wangchuk"
-                  className="pl-9 text-sm"
+                  className="pl-9 text-sm bg-background"
                   required
                 />
               </div>
@@ -78,7 +78,7 @@ export default function RegisterPage() {
                   id="email"
                   type="email"
                   placeholder="karma@example.bt"
-                  className="pl-9 text-sm"
+                  className="pl-9 text-sm bg-background"
                   required
                 />
               </div>
@@ -95,7 +95,7 @@ export default function RegisterPage() {
                     id="password"
                     type="password"
                     placeholder="Password"
-                    className="pl-9 text-sm"
+                    className="pl-9 text-sm bg-background"
                     required
                   />
                 </div>
@@ -111,14 +111,18 @@ export default function RegisterPage() {
                     id="confirm-password"
                     type="password"
                     placeholder="Confirm"
-                    className="pl-9 text-sm"
+                    className="pl-9 text-sm bg-background"
                     required
                   />
                 </div>
               </div>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full shadow-sm">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+            >
               {loading ? "Creating account…" : "Create account"}
             </Button>
           </form>
@@ -138,41 +142,34 @@ export default function RegisterPage() {
       {/* Right panel: brand showcase */}
       <section
         className="relative hidden overflow-hidden lg:flex lg:flex-col lg:justify-between"
-        style={{
-          background:
-            "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)",
-        }}
+        style={{ background: "linear-gradient(180deg, #0a0a0f 0%, #0f1014 50%, #13131a 100%)" }}
       >
-        {/* Decorative elements */}
+        {/* Decorative rings */}
         <div
           aria-hidden="true"
-          className="absolute -right-24 -top-24 h-96 w-96 rounded-full border border-indigo-500/10 bg-indigo-500/5"
+          className="absolute -right-20 -top-20 h-96 w-96 rounded-full border border-primary/5 bg-primary/[0.02]"
         />
         <div
           aria-hidden="true"
-          className="absolute -left-16 bottom-16 h-72 w-72 rounded-full border border-indigo-400/10 bg-indigo-400/5"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute right-20 bottom-40 h-48 w-48 rounded-full border border-violet-500/10 bg-violet-500/5"
+          className="absolute -left-10 bottom-10 h-64 w-64 rounded-full border border-primary/10 bg-primary/[0.03]"
         />
 
         <div className="relative z-10 flex h-full flex-col justify-between px-14 py-16">
           <div>
-            <p className="mb-8 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-400">
+            <p className="mb-8 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
               Built for real work
             </p>
 
-            <h2 className="max-w-xs text-5xl font-bold leading-[1.1] tracking-tight text-white">
+            <h2 className="max-w-xs text-5xl font-bold leading-[1.1] tracking-tight text-foreground">
               Built for teams
               <br />
               that get{" "}
-              <span className="text-indigo-400">things</span>
+              <span className="text-primary">things</span>
               <br />
               done.
             </h2>
 
-            <div className="my-10 h-px w-12 bg-white/10" />
+            <div className="my-10 h-px w-12 bg-border" />
 
             <ul className="space-y-4">
               {[
@@ -181,14 +178,16 @@ export default function RegisterPage() {
                 "See progress at a glance",
               ].map((feat) => (
                 <li key={feat} className="flex items-start gap-3">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400" />
-                  <span className="text-base leading-snug text-slate-400">{feat}</span>
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  <span className="text-base leading-snug text-muted-foreground">
+                    {feat}
+                  </span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <p className="text-xs tracking-wide text-slate-600">
+          <p className="text-xs tracking-wide text-muted-foreground">
             ལས་འགུལ་360 &mdash; Version 0 &bull; Static Preview
           </p>
         </div>

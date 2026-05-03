@@ -1,6 +1,6 @@
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { CreateProjectDialog } from "@/components/projects/CreateProjectDialog";
 import { ProjectsClient } from "@/components/projects/ProjectsClient";
 import { getProjects, Project } from "@/lib/supabase/data";
@@ -30,32 +30,32 @@ export default async function ProjectsPage() {
       label: "Total Projects",
       value: total,
       icon: FolderKanban,
-      iconColor: "text-indigo-600",
-      iconBg: "bg-indigo-50",
-      border: "border-l-indigo-500",
+      iconColor: "text-primary",
+      iconBg: "bg-primary/10",
+      border: "border-l-primary",
     },
     {
       label: "Active",
       value: active,
       icon: TrendingUp,
-      iconColor: "text-emerald-600",
-      iconBg: "bg-emerald-50",
+      iconColor: "text-emerald-400",
+      iconBg: "bg-emerald-500/10",
       border: "border-l-emerald-500",
     },
     {
       label: "Planning",
       value: planning,
       icon: LayoutList,
-      iconColor: "text-violet-600",
-      iconBg: "bg-violet-50",
+      iconColor: "text-violet-400",
+      iconBg: "bg-violet-500/10",
       border: "border-l-violet-500",
     },
     {
       label: "High Priority",
       value: highPriority,
       icon: AlertTriangle,
-      iconColor: "text-amber-600",
-      iconBg: "bg-amber-50",
+      iconColor: "text-amber-400",
+      iconBg: "bg-amber-500/10",
       border: "border-l-amber-500",
     },
   ];

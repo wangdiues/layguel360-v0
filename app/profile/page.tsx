@@ -2,7 +2,6 @@ import { ProfileForm } from "@/components/profile/ProfileForm";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Mail, FolderKanban, CheckSquare, CheckCircle2 } from "lucide-react";
@@ -18,22 +17,22 @@ export default function ProfilePage() {
       label: "Active Projects",
       value: activeProjects,
       icon: FolderKanban,
-      iconColor: "text-indigo-600",
-      iconBg: "bg-indigo-50",
+      iconColor: "text-primary",
+      iconBg: "bg-primary/10",
     },
     {
       label: "Open Tasks",
       value: openTasks,
       icon: CheckSquare,
-      iconColor: "text-amber-600",
-      iconBg: "bg-amber-50",
+      iconColor: "text-amber-400",
+      iconBg: "bg-amber-500/10",
     },
     {
       label: "Completed Tasks",
       value: completedTasks,
       icon: CheckCircle2,
-      iconColor: "text-emerald-600",
-      iconBg: "bg-emerald-50",
+      iconColor: "text-emerald-400",
+      iconBg: "bg-emerald-500/10",
     },
   ];
 
@@ -47,26 +46,24 @@ export default function ProfilePage() {
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
           {/* Profile hero */}
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-5">
-                <Avatar className="h-20 w-20 ring-4 ring-primary/10">
-                  <AvatarFallback className="bg-primary/10 text-2xl font-bold text-primary">
-                    {mockUser.initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                    {mockUser.name}
-                  </h1>
-                  <div className="mt-1.5 flex items-center gap-2 text-sm text-muted-foreground">
-                    <Mail className="h-3.5 w-3.5" />
-                    <span>{mockUser.email}</span>
-                  </div>
-                  <div className="mt-3">
-                    <Badge className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/10">
-                      {mockUser.role}
-                    </Badge>
-                  </div>
+            <div className="flex flex-col gap-5 md:flex-row md:items-center">
+              <Avatar className="h-20 w-20 ring-4 ring-primary/20">
+                <AvatarFallback className="bg-primary/15 text-2xl font-bold text-primary">
+                  {mockUser.initials}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                  {mockUser.name}
+                </h1>
+                <div className="mt-1.5 flex items-center gap-2 text-sm text-muted-foreground">
+                  <Mail className="h-3.5 w-3.5" />
+                  <span>{mockUser.email}</span>
+                </div>
+                <div className="mt-3">
+                  <Badge className="rounded-full bg-primary/15 px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/15">
+                    {mockUser.role}
+                  </Badge>
                 </div>
               </div>
             </div>
