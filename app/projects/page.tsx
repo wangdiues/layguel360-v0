@@ -1,17 +1,8 @@
-import Link from "next/link";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { CreateProjectDialog } from "@/components/projects/CreateProjectDialog";
+import { ProjectsClient } from "@/components/projects/ProjectsClient";
 import { mockProjects } from "@/lib/mock-data";
 
 export default function ProjectsPage() {
@@ -60,49 +51,7 @@ export default function ProjectsPage() {
             ))}
           </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Project List</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Project</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Priority</TableHead>
-                    <TableHead>Due Date</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {mockProjects.map((project) => (
-                    <TableRow key={project.id}>
-                      <TableCell>
-                        <div>
-                          <Link
-                            href={`/projects/${project.id}`}
-                            className="font-medium hover:text-indigo-600 hover:underline"
-                          >
-                            {project.title}
-                          </Link>
-                          <p className="text-sm text-muted-foreground">
-                            {project.description}
-                          </p>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">{project.status}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{project.priority}</Badge>
-                      </TableCell>
-                      <TableCell>{project.end_date}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+          <ProjectsClient projects={mockProjects} />
         </section>
       </main>
     </div>

@@ -1,36 +1,21 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { CommentList } from "@/components/comments/CommentList";
 import { AttachmentList } from "@/components/uploads/AttachmentList";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { CalendarDays, FolderKanban, User } from "lucide-react";
+import { CalendarDays, ChevronRight, FolderKanban, User } from "lucide-react";
 import {
   mockTasks,
   mockProjects,
   mockComments,
   mockAttachments,
 } from "@/lib/mock-data";
-
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <Badge className="rounded-full px-3 py-1" variant="secondary">
-      {status}
-    </Badge>
-  );
-}
-
-function PriorityBadge({ priority }: { priority: string }) {
-  return (
-    <Badge className="rounded-full px-3 py-1" variant="outline">
-      {priority}
-    </Badge>
-  );
-}
 
 export default async function TaskDetailPage({
   params,
@@ -60,11 +45,36 @@ export default async function TaskDetailPage({
         <Topbar />
 
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-1.5">
+            <Link
+              href="/tasks"
+              className="text-sm text-muted-foreground hover:text-slate-900"
+            >
+              Tasks
+            </Link>
+            {project && (
+              <>
+                <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                <Link
+                  href={`/projects/${project.id}`}
+                  className="text-sm text-muted-foreground hover:text-slate-900"
+                >
+                  {project.title}
+                </Link>
+              </>
+            )}
+            <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            <span className="max-w-xs truncate text-sm font-medium text-slate-900">
+              {task.title}
+            </span>
+          </nav>
+
           <div className="flex flex-col justify-between gap-4 rounded-2xl border bg-background p-6 shadow-sm md:flex-row md:items-start">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
-                <StatusBadge status={task.status} />
-                <PriorityBadge priority={task.priority} />
+                <StatusBadge value={task.status} type="status" />
+                <StatusBadge value={task.priority} type="priority" />
               </div>
               <div>
                 <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
@@ -95,7 +105,7 @@ export default async function TaskDetailPage({
                           Status
                         </TableCell>
                         <TableCell>
-                          <StatusBadge status={task.status} />
+                          <StatusBadge value={task.status} type="status" />
                         </TableCell>
                       </TableRow>
                       <TableRow>
@@ -103,7 +113,7 @@ export default async function TaskDetailPage({
                           Priority
                         </TableCell>
                         <TableCell>
-                          <PriorityBadge priority={task.priority} />
+                          <StatusBadge value={task.priority} type="priority" />
                         </TableCell>
                       </TableRow>
                       <TableRow>

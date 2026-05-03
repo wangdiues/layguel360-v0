@@ -1,7 +1,7 @@
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
 import {
   Table,
   TableBody,
@@ -77,7 +77,7 @@ export default function DashboardPage() {
                       <TableRow key={project.id}>
                         <TableCell className="font-medium">{project.title}</TableCell>
                         <TableCell>
-                          <Badge variant="secondary">{project.status}</Badge>
+                          <StatusBadge value={project.status} type="status" />
                         </TableCell>
                         <TableCell>{project.end_date}</TableCell>
                       </TableRow>
@@ -105,9 +105,11 @@ export default function DashboardPage() {
                       <TableRow key={task.id}>
                         <TableCell className="font-medium">{task.title}</TableCell>
                         <TableCell>
-                          <Badge variant="outline">{task.status}</Badge>
+                          <StatusBadge value={task.status} type="status" />
                         </TableCell>
-                        <TableCell>{task.priority}</TableCell>
+                        <TableCell>
+                          <StatusBadge value={task.priority} type="priority" />
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

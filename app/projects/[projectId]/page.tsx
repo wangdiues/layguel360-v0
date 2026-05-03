@@ -2,24 +2,19 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
   CalendarDays,
   CheckCircle2,
+  ChevronRight,
   Circle,
   FolderKanban,
   User,
 } from "lucide-react";
 import { mockProjects, mockTasks } from "@/lib/mock-data";
-
-const statusColors: Record<string, string> = {
-  "In Progress": "bg-blue-50 text-blue-700",
-  Completed: "bg-slate-100 text-slate-600",
-  Pending: "bg-amber-50 text-amber-700",
-};
 
 export default async function ProjectDetailPage({
   params,
@@ -45,12 +40,24 @@ export default async function ProjectDetailPage({
         <Topbar />
 
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-1.5">
+            <Link
+              href="/projects"
+              className="text-sm text-muted-foreground hover:text-slate-900"
+            >
+              Projects
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            <span className="max-w-xs truncate text-sm font-medium text-slate-900">
+              {project.title}
+            </span>
+          </nav>
+
           <div className="flex flex-col justify-between gap-4 rounded-2xl border bg-background p-6 shadow-sm md:flex-row md:items-start">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge className="rounded-full bg-indigo-50 px-3 py-1 text-indigo-700 hover:bg-indigo-50">
-                  {project.status}
-                </Badge>
+                <StatusBadge value={project.status} type="status" />
               </div>
               <div>
                 <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
@@ -98,12 +105,7 @@ export default async function ProjectDetailPage({
                             </p>
                           </div>
                         </div>
-                        <Badge
-                          className={`rounded-full px-3 py-1 ${statusColors[task.status] ?? ""}`}
-                          variant="secondary"
-                        >
-                          {task.status}
-                        </Badge>
+                        <StatusBadge value={task.status} type="status" />
                       </div>
                     </Link>
                   ))}
