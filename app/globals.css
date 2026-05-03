@@ -2,42 +2,49 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-
 @theme inline {
+  /* Color variables */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-jakarta);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-jakarta);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  
+  /* Sidebar variables */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  
+  /* Font variables */
+  --font-sans: var(--font-jakarta, "Inter", system-ui, sans-serif);
+  --font-mono: var(--font-geist-mono, "Geist Mono", monospace);
+  --font-heading: var(--font-jakarta, "Inter", system-ui, sans-serif);
+  
+  /* Radius variables */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -45,6 +52,28 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  
+  /* Shadow variables */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-primary: 0 0 20px rgba(0, 220, 130, 0.1);
+  --shadow-primary-lg: 0 0 30px rgba(0, 220, 130, 0.2);
+  
+  /* Spacing variables */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  
+  /* Transition variables */
+  --transition-all: all 0.2s ease-in-out;
+  --transition-colors: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  --transition-opacity: opacity 0.2s ease-in-out;
+  --transition-transform: transform 0.2s ease-in-out;
 }
 
 :root {
@@ -65,6 +94,7 @@
   --accent: #00dc82;
   --accent-foreground: #0a0a0f;
   --destructive: #ef4444;
+  --destructive-foreground: #e5e5e5;
   --border: #2a2a32;
   --input: #1c1c24;
   --ring: #00dc82;
@@ -86,6 +116,7 @@
 }
 
 .dark {
+  /* Inherit all variables from :root for consistency */
   --background: linear-gradient(180deg, #0a0a0f 0%, #0f1014 50%, #13131a 100%);
   --foreground: #e5e5e5;
   --card: #18181c;
@@ -101,6 +132,7 @@
   --accent: #00dc82;
   --accent-foreground: #0a0a0f;
   --destructive: #ef4444;
+  --destructive-foreground: #e5e5e5;
   --border: #2a2a32;
   --input: #1c1c24;
   --ring: #00dc82;
@@ -121,31 +153,66 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+    transition: var(--transition-colors);
   }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     background: radial-gradient(
       ellipse at center,
       rgba(0, 220, 130, 0.1) 0%,
       rgba(0, 0, 0, 0) 60%
     );
     animation: gradient-pulse 10s ease-in-out infinite;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 
+  /* Improved gradient pulse animation */
   @keyframes gradient-pulse {
     0% {
       background-size: 100% 100%;
+      opacity: 0.8;
     }
     50% {
       background-size: 150% 150%;
+      opacity: 1;
     }
     100% {
       background-size: 100% 100%;
+      opacity: 0.8;
     }
   }
+
+  /* Focus visible styles for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+
+  /* Typography scale */
+  h1 {
+    @apply text-3xl font-bold tracking-tight md:text-4xl;
+  }
+  
+  h2 {
+    @apply text-2xl font-semibold tracking-tight md:text-3xl;
+  }
+  
+  h3 {
+    @apply text-xl font-semibold tracking-tight;
+  }
+  
+  h4 {
+    @apply text-lg font-medium;
+  }
+  
+  p {
+    @apply leading-relaxed;
   }
 }
 
@@ -160,7 +227,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2a2a32;
+  background: var(--border);
   border-radius: 4px;
 }
 
@@ -170,14 +237,20 @@
 
 /* NVIDIA-style card glow */
 .nv-glow {
-  box-shadow: 0 0 20px rgba(0, 220, 130, 0.1);
+  box-shadow: var(--shadow-primary);
+  transition: var(--transition-shadow);
+}
+
+.nv-glow:hover {
+  box-shadow: var(--shadow-primary-lg);
 }
 
 /* Gradient border effect */
 .gradient-border {
   position: relative;
   background: var(--card);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
+  transition: var(--transition-all);
 }
 
 .gradient-border::before {
@@ -191,4 +264,38 @@
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+  transition: var(--transition-opacity);
+}
+
+.gradient-border:hover::before {
+  opacity: 1.5;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  body {
+    animation: none;
+  }
+}
+
+/* Mobile responsiveness base styles */
+@media (max-width: 768px) {
+  h1 {
+    @apply text-2xl;
+  }
+  
+  h2 {
+    @apply text-xl;
+  }
+  
+  h3 {
+    @apply text-lg;
+  }
 }
