@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { mockProjects, mockTasks } from "@/lib/mock-data";
+import { getProjects, getTasks, getDashboardStats, Project, Task } from "@/lib/supabase/data";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -20,20 +20,25 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-export default function DashboardPage() {
-  const totalProjects = mockProjects.length;
-  const activeProjects = mockProjects.filter((p) => p.status === "Active").length;
-  const pendingTasks = mockTasks.filter((t) => t.status !== "Completed").length;
-  const completedTasks = mockTasks.filter((t) => t.status === "Completed").length;
+export default async function DashboardPage() {
+  let projects: Project[] = [];
+  let tasks: Task[] = [];
+  let stats = { totalProjects: 0, activeProjects: 0, totalTasks: 0, completedTasks: 0, inProgressTasks: 0 };
 
-  const recentProjects = mockProjects.slice(0, 5);
-  const activeTasks = mockTasks.filter((t) => t.status !== "Completed").slice(0, 5);
+  try {
+    [projects, tasks, stats] = await Promise.all([getProjects(), getTasks(), getDashboardStats()]);
+  } catch (e) {
+    console.error("Failed to fetch data:", e);
+  }
 
-  const stats = [
+  const recentProjects = projects.slice(0, 5);
+  const activeTasks = tasks.filter((t) => t.status !== "Completed").slice(0, 5);
+
+  const statCards = [
     {
       title: "Total Projects",
-      value: totalProjects,
-      sub: `${activeProjects} currently active`,
+      value: stats.totalProjects,
+      sub: `${stats.activeProjects} currently active`,
       icon: FolderKanban,
       iconBg: "bg-indigo-50",
       iconColor: "text-indigo-600",
@@ -41,7 +46,7 @@ export default function DashboardPage() {
     },
     {
       title: "Active Projects",
-      value: activeProjects,
+      value: stats.activeProjects,
       sub: "Running now",
       icon: TrendingUp,
       iconBg: "bg-blue-50",
@@ -50,7 +55,7 @@ export default function DashboardPage() {
     },
     {
       title: "Pending Tasks",
-      value: pendingTasks,
+      value: stats.totalTasks - stats.completedTasks - stats.inProgressTasks,
       sub: "Needs attention",
       icon: Clock,
       iconBg: "bg-amber-50",
@@ -59,7 +64,7 @@ export default function DashboardPage() {
     },
     {
       title: "Completed Tasks",
-      value: completedTasks,
+      value: stats.completedTasks,
       sub: "Well done",
       icon: CheckCircle2,
       iconBg: "bg-emerald-50",
@@ -76,7 +81,6 @@ export default function DashboardPage() {
         <Topbar />
 
         <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-          {/* Greeting */}
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-900">
               Good morning, Karma 👋
@@ -86,9 +90,8 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          {/* Stat cards */}
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {stats.map((stat) => {
+            {statCards.map((stat) => {
               const Icon = stat.icon;
               return (
                 <Card
@@ -118,9 +121,7 @@ export default function DashboardPage() {
             })}
           </div>
 
-          {/* Content grid */}
           <div className="grid gap-6 xl:grid-cols-[3fr_2fr]">
-            {/* Recent Projects */}
             <Card className="rounded-2xl border-slate-100 shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between border-b border-slate-50 pb-4">
                 <CardTitle className="text-base font-semibold text-slate-900">
@@ -166,7 +167,7 @@ export default function DashboardPage() {
                           <StatusBadge value={project.status} type="status" />
                         </TableCell>
                         <TableCell className="pr-6 text-sm text-slate-500">
-                          {project.end_date}
+                          {project.end_date || "—"}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -175,7 +176,6 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            {/* Active Tasks */}
             <Card className="rounded-2xl border-slate-100 shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between border-b border-slate-50 pb-4">
                 <CardTitle className="text-base font-semibold text-slate-900">
@@ -200,7 +200,7 @@ export default function DashboardPage() {
                         <div className="mt-1.5 flex items-center gap-2">
                           <StatusBadge value={task.priority} type="priority" />
                           <span className="text-xs text-slate-400">
-                            Due {task.due_date}
+                            Due {task.due_date || "—"}
                           </span>
                         </div>
                       </div>
