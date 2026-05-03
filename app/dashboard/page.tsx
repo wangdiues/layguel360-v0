@@ -12,7 +12,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { getProjects, getTasks, getDashboardStats, Project, Task } from "@/lib/supabase/data";
+import {
+  getProjects,
+  getTasks,
+  getDashboardStats,
+  Project,
+  Task,
+} from "@/lib/supabase/data";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -21,53 +27,69 @@ import {
   TrendingUp,
   Plus,
 } from "lucide-react";
+import { StatusBadge } from "@/components/ui/status-badge";
 
 export default async function DashboardPage() {
   let projects: Project[] = [];
   let tasks: Task[] = [];
-  let stats = { totalProjects: 0, activeProjects: 0, totalTasks: 0, completedTasks: 0, inProgressTasks: 0 };
+  let stats = {
+    totalProjects: 0,
+    activeProjects: 0,
+    totalTasks: 0,
+    completedTasks: 0,
+    inProgressTasks: 0,
+  };
 
   try {
-    [projects, tasks, stats] = await Promise.all([getProjects(), getTasks(), getDashboardStats()]);
-  } catch (e) {
-    console.error("Failed to fetch data:", e);
+    [projects, tasks, stats] = await Promise.all([
+      getProjects(),
+      getTasks(),
+      getDashboardStats(),
+    ]);
+  } catch {
+    // graceful fallback — data layer not yet connected
   }
 
   const recentProjects = projects.slice(0, 5);
   const activeTasks = tasks.filter((t) => t.status !== "Completed").slice(0, 5);
+  const pendingTasks = stats.totalTasks - stats.completedTasks - stats.inProgressTasks;
 
   const statCards = [
     {
       title: "Total Projects",
       value: stats.totalProjects,
-      sub: `${stats.activeProjects} currently active`,
+      sub: `${stats.activeProjects} active`,
       icon: FolderKanban,
-      iconColor: "text-primary",
-      iconBg: "bg-primary/10",
+      iconColor: "text-indigo-600",
+      iconBg: "bg-indigo-50",
+      border: "border-l-indigo-500",
     },
     {
       title: "Active Projects",
       value: stats.activeProjects,
       sub: "Running now",
       icon: TrendingUp,
-      iconColor: "text-blue-500",
-      iconBg: "bg-blue-500/10",
+      iconColor: "text-sky-600",
+      iconBg: "bg-sky-50",
+      border: "border-l-sky-500",
     },
     {
       title: "Pending Tasks",
-      value: stats.totalTasks - stats.completedTasks - stats.inProgressTasks,
+      value: pendingTasks,
       sub: "Needs attention",
       icon: Clock,
-      iconColor: "text-amber-500",
-      iconBg: "bg-amber-500/10",
+      iconColor: "text-amber-600",
+      iconBg: "bg-amber-50",
+      border: "border-l-amber-500",
     },
     {
       title: "Completed Tasks",
       value: stats.completedTasks,
-      sub: "Well done",
+      sub: "All time",
       icon: CheckCircle2,
-      iconColor: "text-emerald-500",
-      iconBg: "bg-emerald-500/10",
+      iconColor: "text-emerald-600",
+      iconBg: "bg-emerald-50",
+      border: "border-l-emerald-500",
     },
   ];
 
@@ -79,17 +101,17 @@ export default async function DashboardPage() {
         <Topbar />
 
         <main className="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6 lg:px-8">
-          {/* Header Section */}
+          {/* Page Header */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-                Hey Karma 👋
+                Hey, Karma 👋
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Here&apos;s what&apos;s happening across your projects today.
               </p>
             </div>
-            <Button className="w-fit gap-2">
+            <Button className="w-fit gap-2 shadow-sm">
               <Plus className="h-4 w-4" />
               New Project
             </Button>
@@ -102,7 +124,7 @@ export default async function DashboardPage() {
               return (
                 <Card
                   key={stat.title}
-                  className="rounded-xl border-border bg-card shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary/5"
+                  className={`rounded-xl border border-border border-l-4 ${stat.border} bg-card shadow-sm transition-all duration-200 hover:shadow-md`}
                 >
                   <CardContent className="p-5">
                     <div className="flex items-start justify-between gap-3">
@@ -113,7 +135,9 @@ export default async function DashboardPage() {
                         <p className="mt-1.5 text-4xl font-bold tracking-tight text-foreground">
                           {stat.value}
                         </p>
-                        <p className="mt-1.5 text-xs text-muted-foreground">{stat.sub}</p>
+                        <p className="mt-1.5 text-xs text-muted-foreground">
+                          {stat.sub}
+                        </p>
                       </div>
                       <div
                         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${stat.iconBg}`}
@@ -137,7 +161,7 @@ export default async function DashboardPage() {
                 </CardTitle>
                 <Link
                   href="/projects"
-                  className="flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+                  className="flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:text-primary/80"
                 >
                   View all <ArrowUpRight className="h-3 w-3" />
                 </Link>
@@ -163,7 +187,7 @@ export default async function DashboardPage() {
                         recentProjects.map((project) => (
                           <TableRow
                             key={project.id}
-                            className="border-border hover:bg-muted/50 transition-colors"
+                            className="border-border transition-colors hover:bg-muted/50"
                           >
                             <TableCell className="pl-6">
                               <Link
@@ -174,9 +198,7 @@ export default async function DashboardPage() {
                               </Link>
                             </TableCell>
                             <TableCell>
-                              <Badge variant="outline" className="capitalize">
-                                {project.status}
-                              </Badge>
+                              <StatusBadge value={project.status} type="status" />
                             </TableCell>
                             <TableCell className="pr-6 text-sm text-muted-foreground">
                               {project.end_date || "—"}
@@ -185,8 +207,11 @@ export default async function DashboardPage() {
                         ))
                       ) : (
                         <TableRow>
-                          <TableCell colSpan={3} className="text-center text-muted-foreground py-8">
-                            No recent projects found.
+                          <TableCell
+                            colSpan={3}
+                            className="py-10 text-center text-sm text-muted-foreground"
+                          >
+                            No projects yet.
                           </TableCell>
                         </TableRow>
                       )}
@@ -204,7 +229,7 @@ export default async function DashboardPage() {
                 </CardTitle>
                 <Link
                   href="/tasks"
-                  className="flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+                  className="flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:text-primary/80"
                 >
                   View all <ArrowUpRight className="h-3 w-3" />
                 </Link>
@@ -220,9 +245,7 @@ export default async function DashboardPage() {
                             {task.title}
                           </p>
                           <div className="mt-1.5 flex items-center gap-2">
-                            <Badge variant="outline" className="capitalize">
-                              {task.priority}
-                            </Badge>
+                            <StatusBadge value={task.priority} type="priority" />
                             <span className="text-xs text-muted-foreground">
                               Due {task.due_date || "—"}
                             </span>
@@ -232,7 +255,7 @@ export default async function DashboardPage() {
                     </Link>
                   ))
                 ) : (
-                  <div className="px-5 py-8 text-center text-muted-foreground text-sm">
+                  <div className="px-5 py-10 text-center text-sm text-muted-foreground">
                     No active tasks found.
                   </div>
                 )}

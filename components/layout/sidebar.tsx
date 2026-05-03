@@ -19,21 +19,21 @@ import { mockUser } from "@/lib/mock-data";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Projects", href: "/projects", icon: FolderKanban },
-  { name: "Tasks", href: "/tasks", icon: CheckSquare },
+  { name: "Projects",  href: "/projects",  icon: FolderKanban },
+  { name: "Tasks",     href: "/tasks",     icon: CheckSquare },
   { name: "Documents", href: "/documents", icon: FileText },
-  { name: "Profile", href: "/profile", icon: User },
+  { name: "Profile",   href: "/profile",   icon: User },
 ];
 
 function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full flex-col bg-sidebar">
+    <div className="flex h-full flex-col bg-sidebar border-r border-sidebar-border">
       {/* Brand */}
-      <div className="border-b border-sidebar-border px-5 py-5">
+      <div className="border-b border-sidebar-border px-5 py-[18px]">
         <div className="flex items-center gap-3">
-          <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-xl">
+          <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-xl ring-1 ring-border">
             <Image
               src="/logo.png"
               alt="ལས་འགུལ་360"
@@ -54,7 +54,7 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+        <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/70">
           Main Menu
         </p>
         <div className="space-y-0.5">
@@ -71,7 +71,7 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
                 className={cn(
                   "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150",
                   isActive
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 )}
               >
@@ -85,7 +85,7 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
                 />
                 {item.name}
                 {isActive && (
-                  <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary-foreground/60" />
+                  <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary-foreground/50" />
                 )}
               </Link>
             );
@@ -96,7 +96,7 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
       {/* User */}
       <div className="border-t border-sidebar-border p-3">
         <div className="flex items-center gap-3 rounded-xl px-3 py-2.5">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary ring-1 ring-primary/20">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary ring-1 ring-primary/20">
             {mockUser.initials}
           </div>
           <div className="min-w-0 flex-1">
@@ -129,10 +129,10 @@ export function Sidebar() {
       {/* Mobile trigger */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed left-4 top-4 z-50 flex h-9 w-9 items-center justify-center rounded-xl shadow-lg lg:hidden bg-sidebar"
+        className="fixed left-4 top-4 z-50 flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card shadow-sm lg:hidden"
         aria-label="Open menu"
       >
-        <Menu className="h-4 w-4 text-sidebar-foreground" />
+        <Menu className="h-4 w-4 text-foreground" />
       </button>
 
       {/* Mobile drawer */}
@@ -146,7 +146,7 @@ export function Sidebar() {
       </Sheet>
 
       {/* Desktop */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 shadow-2xl lg:block">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 lg:block">
         <NavContent />
       </aside>
     </>

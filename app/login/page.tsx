@@ -22,12 +22,12 @@ export default function LoginPage() {
 
   return (
     <main className="grid min-h-screen lg:grid-cols-2">
-      {/* ── Left panel: form ── */}
+      {/* Left panel: form */}
       <section className="flex flex-col items-center justify-center bg-card px-8 py-16 sm:px-16">
         <div className="w-full max-w-sm">
-          {/* Brand mark */}
+          {/* Brand */}
           <div className="mb-10 flex items-center gap-3">
-            <div className="relative h-10 w-10 overflow-hidden rounded-xl">
+            <div className="relative h-10 w-10 overflow-hidden rounded-xl ring-1 ring-border">
               <Image
                 src="/logo.png"
                 alt="ལས་འགུལ་360"
@@ -35,7 +35,7 @@ export default function LoginPage() {
                 className="object-cover"
               />
             </div>
-            <span className="text-lg font-semibold tracking-tight text-foreground">
+            <span className="text-lg font-bold tracking-tight text-foreground">
               ལས་འགུལ་360
             </span>
           </div>
@@ -62,7 +62,7 @@ export default function LoginPage() {
                   id="email"
                   type="email"
                   placeholder="karma@example.bt"
-                  className="pl-9 text-sm bg-background"
+                  className="pl-9 text-sm"
                   required
                 />
               </div>
@@ -86,17 +86,13 @@ export default function LoginPage() {
                   id="password"
                   type="password"
                   placeholder="Enter your password"
-                  className="pl-9 text-sm bg-background"
+                  className="pl-9 text-sm"
                   required
                 />
               </div>
             </div>
 
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-            >
+            <Button type="submit" disabled={loading} className="w-full shadow-sm">
               {loading ? "Signing in…" : "Sign in"}
             </Button>
           </form>
@@ -113,43 +109,44 @@ export default function LoginPage() {
         </div>
       </section>
 
-      {/* ── Right panel: brand ── */}
+      {/* Right panel: brand showcase */}
       <section
         className="relative hidden overflow-hidden lg:flex lg:flex-col lg:justify-between"
-        style={{ background: "linear-gradient(180deg, #0a0a0f 0%, #0f1014 50%, #13131a 100%)" }}
+        style={{
+          background:
+            "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)",
+        }}
       >
-        {/* Decorative rings */}
+        {/* Decorative elements */}
         <div
           aria-hidden="true"
-          className="absolute -right-20 -top-20 h-96 w-96 rounded-full border border-primary/5 bg-primary/[0.02]"
+          className="absolute -right-24 -top-24 h-96 w-96 rounded-full border border-indigo-500/10 bg-indigo-500/5"
         />
         <div
           aria-hidden="true"
-          className="absolute -left-10 bottom-10 h-64 w-64 rounded-full border border-primary/10 bg-primary/[0.03]"
+          className="absolute -left-16 bottom-16 h-72 w-72 rounded-full border border-indigo-400/10 bg-indigo-400/5"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute right-20 bottom-40 h-48 w-48 rounded-full border border-violet-500/10 bg-violet-500/5"
         />
 
-        {/* Inner content — sits above the rings */}
         <div className="relative z-10 flex h-full flex-col justify-between px-14 py-16">
-          {/* Top: tagline block */}
           <div>
-            {/* Overline label */}
-            <p className="mb-8 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+            <p className="mb-8 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-400">
               Project Intelligence Platform
             </p>
 
-            {/* Large headline — intentionally mixed sizing */}
-            <h2 className="max-w-xs text-5xl font-bold leading-[1.1] tracking-tight text-foreground">
+            <h2 className="max-w-xs text-5xl font-bold leading-[1.1] tracking-tight text-white">
               One platform.
               <br />
-              <span className="text-primary">Every</span> project.
+              <span className="text-indigo-400">Every</span> project.
               <br />
               Full clarity.
             </h2>
 
-            {/* Separator */}
-            <div className="my-10 h-px w-12 bg-border" />
+            <div className="my-10 h-px w-12 bg-white/10" />
 
-            {/* Feature list */}
             <ul className="space-y-4">
               {[
                 "Track projects end to end",
@@ -157,17 +154,14 @@ export default function LoginPage() {
                 "Coordinate teams with ease",
               ].map((feat) => (
                 <li key={feat} className="flex items-start gap-3">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                  <span className="text-base leading-snug text-muted-foreground">
-                    {feat}
-                  </span>
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400" />
+                  <span className="text-base leading-snug text-slate-400">{feat}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Bottom: version descriptor */}
-          <p className="text-xs tracking-wide text-muted-foreground">
+          <p className="text-xs tracking-wide text-slate-600">
             ལས་འགུལ་360 &mdash; Version 0 &bull; Static Preview
           </p>
         </div>

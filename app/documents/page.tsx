@@ -2,17 +2,17 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   FileArchive,
   FileSpreadsheet,
   FileText,
+  Files,
+  HardDrive,
+  FolderKanban,
+  CalendarDays,
   Plus,
+  Download,
 } from "lucide-react";
 
 const documents = [
@@ -25,6 +25,8 @@ const documents = [
     uploadedBy: "Karma Wangchuk",
     uploadDate: "28 Apr 2026",
     icon: FileText,
+    iconColor: "text-red-600",
+    iconBg: "bg-red-50",
   },
   {
     id: 2,
@@ -35,6 +37,8 @@ const documents = [
     uploadedBy: "Pema Lhamo",
     uploadDate: "25 Apr 2026",
     icon: FileSpreadsheet,
+    iconColor: "text-emerald-600",
+    iconBg: "bg-emerald-50",
   },
   {
     id: 3,
@@ -45,6 +49,8 @@ const documents = [
     uploadedBy: "Wangdi",
     uploadDate: "20 Apr 2026",
     icon: FileArchive,
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
   },
   {
     id: 4,
@@ -55,6 +61,8 @@ const documents = [
     uploadedBy: "Tshering Dorji",
     uploadDate: "18 Apr 2026",
     icon: FileText,
+    iconColor: "text-red-600",
+    iconBg: "bg-red-50",
   },
   {
     id: 5,
@@ -65,14 +73,16 @@ const documents = [
     uploadedBy: "Sonam Tobgay",
     uploadDate: "15 Apr 2026",
     icon: FileSpreadsheet,
+    iconColor: "text-emerald-600",
+    iconBg: "bg-emerald-50",
   },
 ];
 
 const stats = [
-  { label: "Total Documents", value: "5" },
-  { label: "Total Size", value: "26.3 MB" },
-  { label: "Projects Covered", value: "4" },
-  { label: "Uploaded This Month", value: "5" },
+  { label: "Total Documents", value: "5", icon: Files, iconColor: "text-indigo-600", iconBg: "bg-indigo-50", border: "border-l-indigo-500" },
+  { label: "Total Size", value: "26.3 MB", icon: HardDrive, iconColor: "text-sky-600", iconBg: "bg-sky-50", border: "border-l-sky-500" },
+  { label: "Projects Covered", value: "4", icon: FolderKanban, iconColor: "text-violet-600", iconBg: "bg-violet-50", border: "border-l-violet-500" },
+  { label: "Uploaded This Month", value: "5", icon: CalendarDays, iconColor: "text-emerald-600", iconBg: "bg-emerald-50", border: "border-l-emerald-500" },
 ];
 
 export default function DocumentsPage() {
@@ -86,76 +96,101 @@ export default function DocumentsPage() {
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
-              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">
                 Documents
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="mt-0.5 text-sm text-muted-foreground">
                 Project files, reports, and supporting attachments.
               </p>
             </div>
-
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-              <Plus className="mr-2 h-4 w-4" />
+            <Button className="w-fit gap-2 shadow-sm">
+              <Plus className="h-4 w-4" />
               Upload Document
             </Button>
           </div>
 
+          {/* Stats */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((item) => (
-              <Card key={item.label} className="rounded-2xl shadow-sm">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {item.label}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold">{item.value}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <Card className="rounded-2xl shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-base">All Documents</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {documents.map((doc) => {
-                const Icon = doc.icon;
-                return (
-                  <div
-                    key={doc.id}
-                    className="flex flex-col gap-3 rounded-2xl border bg-background p-4 sm:flex-row sm:items-center sm:justify-between"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="rounded-xl bg-primary/10 p-2 text-primary">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="font-medium">{doc.name}</p>
-                        <p className="mt-0.5 text-sm text-muted-foreground">
-                          {doc.type} · {doc.size}
-                        </p>
-                        <div className="mt-2 flex flex-wrap items-center gap-2">
-                          <Badge
-                            variant="secondary"
-                            className="rounded-full text-xs"
-                          >
-                            {doc.project}
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="shrink-0 text-right">
-                      <p className="text-sm font-medium">{doc.uploadedBy}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {doc.uploadDate}
+            {stats.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Card
+                  key={item.label}
+                  className={`rounded-xl border border-border border-l-4 ${item.border} bg-card shadow-sm`}
+                >
+                  <CardContent className="flex items-center justify-between p-5">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        {item.label}
+                      </p>
+                      <p className="mt-1 text-2xl font-bold tracking-tight text-foreground">
+                        {item.value}
                       </p>
                     </div>
-                  </div>
-                );
-              })}
+                    <div
+                      className={`flex h-10 w-10 items-center justify-center rounded-xl ${item.iconBg}`}
+                    >
+                      <Icon className={`h-5 w-5 ${item.iconColor}`} />
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Document list */}
+          <Card className="rounded-xl shadow-sm">
+            <CardHeader className="border-b border-border pb-4">
+              <CardTitle className="text-base font-semibold">All Documents</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="divide-y divide-border">
+                {documents.map((doc) => {
+                  const Icon = doc.icon;
+                  return (
+                    <div
+                      key={doc.id}
+                      className="flex flex-col gap-3 px-6 py-4 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div
+                          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${doc.iconBg}`}
+                        >
+                          <Icon className={`h-5 w-5 ${doc.iconColor}`} />
+                        </div>
+                        <div>
+                          <p className="font-medium text-foreground">{doc.name}</p>
+                          <p className="mt-0.5 text-sm text-muted-foreground">
+                            {doc.type} · {doc.size}
+                          </p>
+                          <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <Badge
+                              variant="secondary"
+                              className="rounded-full text-xs font-medium"
+                            >
+                              {doc.project}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4 shrink-0">
+                        <div className="text-right">
+                          <p className="text-sm font-medium text-foreground">
+                            {doc.uploadedBy}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {doc.uploadDate}
+                          </p>
+                        </div>
+                        <button className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                          <Download className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </CardContent>
           </Card>
         </div>

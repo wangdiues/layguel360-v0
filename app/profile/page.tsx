@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Mail } from "lucide-react";
+import { Mail, FolderKanban, CheckSquare, CheckCircle2 } from "lucide-react";
 import { mockUser, mockProjects, mockTasks } from "@/lib/mock-data";
 
 export default function ProfilePage() {
@@ -14,9 +14,27 @@ export default function ProfilePage() {
   const completedTasks = mockTasks.filter((t) => t.status === "Completed").length;
 
   const stats = [
-    { label: "Active Projects", value: activeProjects },
-    { label: "Open Tasks", value: openTasks },
-    { label: "Completed Tasks", value: completedTasks },
+    {
+      label: "Active Projects",
+      value: activeProjects,
+      icon: FolderKanban,
+      iconColor: "text-indigo-600",
+      iconBg: "bg-indigo-50",
+    },
+    {
+      label: "Open Tasks",
+      value: openTasks,
+      icon: CheckSquare,
+      iconColor: "text-amber-600",
+      iconBg: "bg-amber-50",
+    },
+    {
+      label: "Completed Tasks",
+      value: completedTasks,
+      icon: CheckCircle2,
+      iconColor: "text-emerald-600",
+      iconBg: "bg-emerald-50",
+    },
   ];
 
   return (
@@ -27,24 +45,25 @@ export default function ProfilePage() {
         <Topbar />
 
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border bg-card p-6 shadow-sm">
+          {/* Profile hero */}
+          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-4">
-                <Avatar className="h-20 w-20 border">
-                  <AvatarFallback className="bg-primary/20 text-xl font-semibold text-primary">
+              <div className="flex items-center gap-5">
+                <Avatar className="h-20 w-20 ring-4 ring-primary/10">
+                  <AvatarFallback className="bg-primary/10 text-2xl font-bold text-primary">
                     {mockUser.initials}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                  <h1 className="text-2xl font-bold tracking-tight text-foreground">
                     {mockUser.name}
                   </h1>
-                  <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                    <Mail className="h-4 w-4" />
+                  <div className="mt-1.5 flex items-center gap-2 text-sm text-muted-foreground">
+                    <Mail className="h-3.5 w-3.5" />
                     <span>{mockUser.email}</span>
                   </div>
                   <div className="mt-3">
-                    <Badge className="rounded-full bg-primary/10 px-3 py-1 text-primary hover:bg-primary/10">
+                    <Badge className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/10">
                       {mockUser.role}
                     </Badge>
                   </div>
@@ -53,43 +72,59 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
             <ProfileForm
               defaultName={mockUser.name}
               defaultEmail={mockUser.email}
               defaultBio={mockUser.bio}
             />
 
-            <div className="space-y-6">
-              <Card className="rounded-2xl shadow-sm">
-                <CardHeader>
-                  <CardTitle className="text-base">Account Summary</CardTitle>
+            <div className="space-y-4">
+              {/* Stats card */}
+              <Card className="rounded-xl shadow-sm">
+                <CardHeader className="border-b border-border pb-4">
+                  <CardTitle className="text-base font-semibold">
+                    Account Summary
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  {stats.map((item, index) => (
-                    <div key={item.label}>
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm text-muted-foreground">
-                          {item.label}
-                        </p>
-                        <p className="text-lg font-semibold">{item.value}</p>
-                      </div>
-                      {index !== stats.length - 1 && (
-                        <Separator className="mt-4" />
-                      )}
-                    </div>
-                  ))}
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border">
+                    {stats.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <div
+                          key={item.label}
+                          className="flex items-center justify-between px-5 py-4"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`flex h-8 w-8 items-center justify-center rounded-lg ${item.iconBg}`}
+                            >
+                              <Icon className={`h-4 w-4 ${item.iconColor}`} />
+                            </div>
+                            <p className="text-sm font-medium text-foreground">
+                              {item.label}
+                            </p>
+                          </div>
+                          <p className="text-lg font-bold text-foreground">
+                            {item.value}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </CardContent>
               </Card>
 
-              <Card className="rounded-2xl shadow-sm">
-                <CardHeader>
-                  <CardTitle className="text-base">Role</CardTitle>
+              {/* Role card */}
+              <Card className="rounded-xl shadow-sm">
+                <CardHeader className="border-b border-border pb-4">
+                  <CardTitle className="text-base font-semibold">Role</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    {mockUser.role} — can create and manage projects, tasks,
-                    comments, and documents.
+                <CardContent className="p-5">
+                  <p className="text-sm font-medium text-foreground">{mockUser.role}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Can create and manage projects, tasks, comments, and documents.
                   </p>
                 </CardContent>
               </Card>
