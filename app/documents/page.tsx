@@ -150,7 +150,7 @@ export default function DocumentsPage() {
                   return (
                     <div
                       key={doc.id}
-                      className="flex flex-col gap-3 px-6 py-4 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
+                      className="flex flex-col gap-3 px-6 py-4 transition-colors hover:bg-white/[0.05] sm:flex-row sm:items-center sm:justify-between"
                     >
                       <div className="flex items-start gap-3">
                         <div

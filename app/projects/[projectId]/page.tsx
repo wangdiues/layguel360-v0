@@ -63,7 +63,7 @@ export default async function ProjectDetailPage({
           </nav>
 
           {/* Hero card */}
-          <div className="flex flex-col justify-between gap-4 rounded-xl border border-border bg-card p-6 shadow-sm md:flex-row md:items-start">
+          <div className="flex flex-col justify-between gap-4 rounded-xl border border-white/[0.08] bg-white/[0.05] backdrop-blur-md p-6 md:flex-row md:items-start">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
                 <StatusBadge value={project.status} type="status" />
@@ -107,7 +107,7 @@ export default async function ProjectDetailPage({
                 ) : (
                   projectTasks.map((task) => (
                     <Link key={task.id} href={`/tasks/${task.id}`}>
-                      <div className="flex flex-col gap-3 rounded-xl border border-border bg-background p-4 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex flex-col gap-3 rounded-xl border border-white/[0.07] bg-white/[0.04] p-4 transition-colors hover:bg-white/[0.07] sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-start gap-3">
                           {task.status === "Completed" ? (
                             <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />

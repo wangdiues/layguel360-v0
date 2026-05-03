@@ -103,7 +103,7 @@ export default async function TaskDetailPage({
           </nav>
 
           {/* Hero card */}
-          <div className="flex flex-col justify-between gap-4 rounded-xl border border-border bg-card p-6 shadow-sm md:flex-row md:items-start">
+          <div className="flex flex-col justify-between gap-4 rounded-xl border border-white/[0.08] bg-white/[0.05] backdrop-blur-md p-6 md:flex-row md:items-start">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
                 <StatusBadge value={task.status} type="status" />

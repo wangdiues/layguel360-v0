@@ -45,7 +45,7 @@ export default function ProfilePage() {
 
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
           {/* Profile hero */}
-          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <div className="rounded-xl border border-white/[0.08] bg-white/[0.05] backdrop-blur-md p-6">
             <div className="flex flex-col gap-5 md:flex-row md:items-center">
               <Avatar className="h-20 w-20 ring-4 ring-primary/20">
                 <AvatarFallback className="bg-primary/15 text-2xl font-bold text-primary">
