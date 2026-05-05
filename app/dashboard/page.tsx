@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { mockProjects, mockTasks } from "@/lib/mock-data";
+import { getDashboardStats, getProjects, getTasks } from "@/lib/supabase/queries.server";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -22,22 +22,16 @@ import {
   Plus,
 } from "lucide-react";
 
-export default function DashboardPage() {
-  const projects = mockProjects;
-  const tasks = mockTasks;
-
-  const stats = {
-    totalProjects: projects.length,
-    activeProjects: projects.filter((p) => p.status === "Active").length,
-    totalTasks: tasks.length,
-    completedTasks: tasks.filter((t) => t.status === "Completed").length,
-    inProgressTasks: tasks.filter((t) => t.status === "In Progress").length,
-  };
+export default async function DashboardPage() {
+  const [stats, projects, tasks] = await Promise.all([
+    getDashboardStats(),
+    getProjects(),
+    getTasks(),
+  ]);
 
   const recentProjects = projects.slice(0, 5);
   const activeTasks = tasks.filter((t) => t.status !== "Completed").slice(0, 5);
-  const pendingTasks =
-    stats.totalTasks - stats.completedTasks - stats.inProgressTasks;
+  const pendingTasks = stats.pendingTasks;
 
   const statCards = [
     {
@@ -167,6 +161,16 @@ export default function DashboardPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
+                    {recentProjects.length === 0 && (
+                      <TableRow className="border-white/[0.06] hover:bg-transparent">
+                        <TableCell
+                          colSpan={3}
+                          className="px-6 py-10 text-center text-sm text-muted-foreground"
+                        >
+                          No projects yet. Create one to get started.
+                        </TableCell>
+                      </TableRow>
+                    )}
                     {recentProjects.map((project) => (
                       <TableRow key={project.id} className="border-white/[0.06]">
                         <TableCell className="pl-6">
@@ -204,6 +208,11 @@ export default function DashboardPage() {
                 </Link>
               </CardHeader>
               <CardContent className="divide-y divide-white/[0.06] p-0">
+                {activeTasks.length === 0 && (
+                  <p className="px-5 py-10 text-center text-sm text-muted-foreground">
+                    No active tasks.
+                  </p>
+                )}
                 {activeTasks.map((task) => (
                   <Link key={task.id} href={`/tasks/${task.id}`} className="block">
                     <div className="flex items-start gap-3 px-5 py-4 transition-colors hover:bg-white/[0.04]">
