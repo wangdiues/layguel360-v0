@@ -164,35 +164,31 @@ Do not implement yet:
 
 
 
-Use a professional SaaS dashboard style.
+Use a modern NVIDIA-inspired dark SaaS dashboard aesthetic.
 
 
 
-Preferred design:
+Locked design tokens (see `app/globals.css`):
 
 
 
-\- Light theme
+\- Dark theme — background `#0a0a0f`, foreground `#e5e5e5`
 
-\- White cards
+\- Glassmorphic cards with translucent surfaces and `backdrop-blur`
 
-\- Soft borders
+\- Primary / accent: NVIDIA green `#00dc82` — used for CTAs, focus rings, and key highlights
 
-\- Rounded corners
+\- Sidebar and topbar are translucent and float above the canvas particle background
 
-\- Clean typography
+\- Soft rounded corners (radius scale defined via CSS variables)
 
-\- Sidebar navigation
+\- Status palette via `components/ui/status-badge.tsx`
 
-\- Topbar with search/profile area
+\- Typography: Plus Jakarta Sans (Latin), JetBrains Mono (code), Noto Sans Tibetan (Dzongkha headings, to be added)
 
-\- Status badges
+\- Canvas particle background (`components/layout/BackgroundAnimation.tsx`) with `prefers-reduced-motion` honored
 
-\- Responsive mobile layout
-
-\- Indigo, blue, slate, or neutral accents
-
-\- Do not use green as the primary brand color
+\- Responsive desktop and mobile browser layout
 
 
 

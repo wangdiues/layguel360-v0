@@ -61,14 +61,16 @@ The product should feel like a clean, professional project management dashboard 
 
 ## Design rules
 
-- Use a clean modern SaaS dashboard design.
-- Use light theme.
-- Use white cards, soft borders, rounded corners, and spacious layout.
-- Use indigo, blue, slate, or neutral as the primary visual direction.
-- Do not use green as the main brand color.
-- Use shadcn/ui components where appropriate.
-- Use lucide-react icons where appropriate.
-- Use responsive layout for desktop and mobile browser.
+- Use a modern, NVIDIA-inspired dark SaaS dashboard aesthetic.
+- Dark surface (`#0a0a0f` background, `#18181c` cards) with high-contrast foreground (`#e5e5e5`).
+- Primary and accent: NVIDIA green `#00dc82`. Reserve for CTAs, focus rings, active states, and key data highlights.
+- Glassmorphism: cards, sidebar, and topbar use translucent surfaces with `backdrop-blur` and subtle white-alpha borders.
+- Soft rounded corners (radius `0.5rem` base; scale `sm/md/lg/xl/2xl` defined in `app/globals.css`).
+- Subtle radial green-glow background gradient with the canvas particle layer (`components/layout/BackgroundAnimation.tsx`). Both must respect `prefers-reduced-motion`.
+- Typography: Plus Jakarta Sans (Latin), JetBrains Mono (code). Reserve Noto Sans Tibetan for Dzongkha headings (to be added).
+- Status palette: emerald (Active), blue (In Progress), violet (Planning), amber (Pending), purple (Review), slate (Completed), orange (On Hold). Defined in `components/ui/status-badge.tsx`.
+- Use shadcn/ui primitives and lucide-react icons throughout.
+- Responsive desktop + mobile browser layout.
 - Keep the Dzongkha title: ལས་འགུལ་360.
 - Do not rename the project.
 
