@@ -1,0 +1,11 @@
+.next
+.vercel
+node_modules
+package-lock.json
+*.tsbuildinfo
+public
+coverage
+build
+out
+.aider*
+.claude
