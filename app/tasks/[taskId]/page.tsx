@@ -16,16 +16,7 @@ import {
   Pencil,
   Hash,
 } from "lucide-react";
-import {
-  getTask,
-  getProject,
-  getComments,
-  getAttachments,
-  Comment,
-  Attachment,
-  Task,
-  Project,
-} from "@/lib/supabase/data";
+import { mockTasks, mockProjects, mockComments, mockAttachments } from "@/lib/mock-data";
 
 export default async function TaskDetailPage({
   params,
@@ -34,25 +25,12 @@ export default async function TaskDetailPage({
 }) {
   const { taskId } = await params;
 
-  let task: Task | null = null;
-  let project: Project | null = null;
-  let comments: Comment[] = [];
-  let attachments: Attachment[] = [];
-
-  try {
-    [task, comments, attachments] = await Promise.all([
-      getTask(taskId),
-      getComments(taskId),
-      getAttachments(taskId),
-    ]);
-    if (task) {
-      project = await getProject(task.project_id);
-    }
-  } catch {
-    // graceful fallback
-  }
-
+  const task = mockTasks.find((t) => t.id === taskId);
   if (!task) notFound();
+
+  const project = mockProjects.find((p) => p.id === task.project_id) ?? null;
+  const comments = mockComments[taskId] ?? [];
+  const attachments = mockAttachments[taskId] ?? [];
 
   const created = new Date(task.created_at).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -61,12 +39,12 @@ export default async function TaskDetailPage({
   });
 
   const detailRows = [
-    { label: "Status",        content: <StatusBadge value={task.status} type="status" /> },
-    { label: "Priority",      content: <StatusBadge value={task.priority} type="priority" /> },
-    { label: "Due Date",      content: <span className="text-sm font-medium text-foreground">{task.due_date || "—"}</span> },
-    { label: "Project",       content: <span className="text-sm font-medium text-foreground">{project?.title ?? "—"}</span> },
-    { label: "Assignee",      content: <span className="text-sm font-medium text-foreground">{task.assignee || "—"}</span> },
-    { label: "Created",       content: <span className="text-sm text-muted-foreground">{created}</span> },
+    { label: "Status",   content: <StatusBadge value={task.status} type="status" /> },
+    { label: "Priority", content: <StatusBadge value={task.priority} type="priority" /> },
+    { label: "Due Date", content: <span className="text-sm font-medium text-foreground">{task.due_date || "—"}</span> },
+    { label: "Project",  content: <span className="text-sm font-medium text-foreground">{project?.title ?? "—"}</span> },
+    { label: "Assignee", content: <span className="text-sm font-medium text-foreground">{task.assignee || "—"}</span> },
+    { label: "Created",  content: <span className="text-sm text-muted-foreground">{created}</span> },
   ];
 
   return (
@@ -128,15 +106,15 @@ export default async function TaskDetailPage({
           <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
             <div className="space-y-6">
               {/* Detail table */}
-              <Card className="rounded-xl shadow-sm">
-                <CardHeader className="border-b border-border pb-4">
+              <Card>
+                <CardHeader className="border-b border-white/[0.08] pb-4">
                   <CardTitle className="flex items-center gap-2 text-base font-semibold">
                     <Hash className="h-4 w-4 text-primary" />
                     Task Details
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <div className="divide-y divide-border">
+                  <div className="divide-y divide-white/[0.06]">
                     {detailRows.map((row) => (
                       <div
                         key={row.label}
@@ -158,8 +136,8 @@ export default async function TaskDetailPage({
 
             {/* Summary sidebar */}
             <div className="space-y-4">
-              <Card className="rounded-xl shadow-sm">
-                <CardHeader className="border-b border-border pb-4">
+              <Card>
+                <CardHeader className="border-b border-white/[0.08] pb-4">
                   <CardTitle className="text-base font-semibold">Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 p-5">
@@ -174,7 +152,7 @@ export default async function TaskDetailPage({
                       </p>
                     </div>
                   </div>
-                  <Separator />
+                  <Separator className="bg-white/[0.08]" />
                   <div className="flex items-start gap-3">
                     <FolderKanban className="mt-0.5 h-4 w-4 text-muted-foreground" />
                     <div>
@@ -186,7 +164,7 @@ export default async function TaskDetailPage({
                       </p>
                     </div>
                   </div>
-                  <Separator />
+                  <Separator className="bg-white/[0.08]" />
                   <div className="flex items-start gap-3">
                     <User className="mt-0.5 h-4 w-4 text-muted-foreground" />
                     <div>

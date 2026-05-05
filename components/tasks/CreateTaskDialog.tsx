@@ -17,24 +17,54 @@ import { Textarea } from "@/components/ui/textarea";
 
 type Project = { id: string; title: string };
 
-export function CreateTaskDialog({ projects }: { projects: Project[] }) {
+type Task = {
+  id: string;
+  project_id: string;
+  title: string;
+  description: string | null;
+  status: string;
+  priority: string;
+  due_date: string | null;
+  assignee: string | null;
+  created_at: string;
+};
+
+type Props = {
+  projects: Project[];
+  onAdd?: (task: Task) => void;
+};
+
+export function CreateTaskDialog({ projects, onAdd }: Props) {
   const [open, setOpen] = useState(false);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const task: Task = {
+      id: `task-${Date.now()}`,
+      project_id: (data.get("project_id") as string) || "",
+      title: data.get("title") as string,
+      description: (data.get("description") as string) || null,
+      status: data.get("status") as string,
+      priority: data.get("priority") as string,
+      due_date: (data.get("due_date") as string) || null,
+      assignee: null,
+      created_at: new Date().toISOString(),
+    };
+    onAdd?.(task);
     setOpen(false);
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-indigo-600 text-white hover:bg-indigo-700">
+        <Button>
           <Plus className="mr-2 h-4 w-4" />
           Create Task
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-lg rounded-2xl">
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Create Task</DialogTitle>
         </DialogHeader>
@@ -60,7 +90,7 @@ export function CreateTaskDialog({ projects }: { projects: Project[] }) {
             <select
               id="project_id"
               name="project_id"
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0"
             >
               <option value="">— No project —</option>
               {projects.map((p) => (
@@ -78,7 +108,7 @@ export function CreateTaskDialog({ projects }: { projects: Project[] }) {
                 id="status"
                 name="status"
                 defaultValue="Pending"
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0"
               >
                 <option>Pending</option>
                 <option>In Progress</option>
@@ -93,7 +123,7 @@ export function CreateTaskDialog({ projects }: { projects: Project[] }) {
                 id="priority"
                 name="priority"
                 defaultValue="Medium"
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0"
               >
                 <option>Low</option>
                 <option>Medium</option>
@@ -112,9 +142,7 @@ export function CreateTaskDialog({ projects }: { projects: Project[] }) {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" className="bg-indigo-600 text-white hover:bg-indigo-700">
-              Create Task
-            </Button>
+            <Button type="submit">Create Task</Button>
           </div>
         </form>
       </DialogContent>

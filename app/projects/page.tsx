@@ -1,28 +1,38 @@
+"use client";
+
+import { useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { Card, CardContent } from "@/components/ui/card";
 import { CreateProjectDialog } from "@/components/projects/CreateProjectDialog";
 import { ProjectsClient } from "@/components/projects/ProjectsClient";
-import { getProjects, Project } from "@/lib/supabase/data";
+import { mockProjects } from "@/lib/mock-data";
 import { FolderKanban, TrendingUp, LayoutList, AlertTriangle } from "lucide-react";
 
-export default async function ProjectsPage() {
-  let projects: Project[] = [];
-  let total = 0;
-  let active = 0;
-  let planning = 0;
-  let highPriority = 0;
+type Project = {
+  id: string;
+  title: string;
+  description: string | null;
+  status: string;
+  priority: string;
+  start_date: string | null;
+  end_date: string | null;
+  department: string | null;
+  manager: string | null;
+};
 
-  try {
-    projects = await getProjects();
-    total = projects.length;
-    active = projects.filter((p) => p.status === "Active").length;
-    planning = projects.filter((p) => p.status === "Planning").length;
-    highPriority = projects.filter(
-      (p) => p.priority === "High" || p.priority === "Critical"
-    ).length;
-  } catch {
-    // graceful fallback
+export default function ProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>(mockProjects);
+
+  const total = projects.length;
+  const active = projects.filter((p) => p.status === "Active").length;
+  const planning = projects.filter((p) => p.status === "Planning").length;
+  const highPriority = projects.filter(
+    (p) => p.priority === "High" || p.priority === "Critical"
+  ).length;
+
+  function handleAdd(project: Project) {
+    setProjects((prev) => [project, ...prev]);
   }
 
   const statCards = [
@@ -63,7 +73,6 @@ export default async function ProjectsPage() {
   return (
     <div className="min-h-screen">
       <Sidebar />
-
       <div className="lg:pl-72">
         <Topbar />
         <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
@@ -76,17 +85,14 @@ export default async function ProjectsPage() {
                 Manage project plans, deadlines, priorities, and progress.
               </p>
             </div>
-            <CreateProjectDialog />
+            <CreateProjectDialog onAdd={handleAdd} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {statCards.map((item) => {
               const Icon = item.icon;
               return (
-                <Card
-                  key={item.label}
-                  className={`rounded-xl border border-border border-l-4 ${item.border} bg-card shadow-sm`}
-                >
+                <Card key={item.label} className={`border-l-4 ${item.border}`}>
                   <CardContent className="flex items-center justify-between p-5">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">

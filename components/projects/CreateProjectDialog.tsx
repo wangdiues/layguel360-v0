@@ -15,24 +15,53 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-export function CreateProjectDialog() {
+type Project = {
+  id: string;
+  title: string;
+  description: string | null;
+  status: string;
+  priority: string;
+  start_date: string | null;
+  end_date: string | null;
+  department: string | null;
+  manager: string | null;
+};
+
+type Props = {
+  onAdd?: (project: Project) => void;
+};
+
+export function CreateProjectDialog({ onAdd }: Props) {
   const [open, setOpen] = useState(false);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const project: Project = {
+      id: `proj-${Date.now()}`,
+      title: data.get("title") as string,
+      description: (data.get("description") as string) || null,
+      status: data.get("status") as string,
+      priority: data.get("priority") as string,
+      start_date: (data.get("start_date") as string) || null,
+      end_date: (data.get("end_date") as string) || null,
+      department: (data.get("department") as string) || null,
+      manager: null,
+    };
+    onAdd?.(project);
     setOpen(false);
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-indigo-600 text-white hover:bg-indigo-700">
+        <Button>
           <Plus className="mr-2 h-4 w-4" />
           Create Project
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-lg rounded-2xl">
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Create Project</DialogTitle>
         </DialogHeader>
@@ -60,7 +89,7 @@ export function CreateProjectDialog() {
                 id="status"
                 name="status"
                 defaultValue="Planning"
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0"
               >
                 <option>Planning</option>
                 <option>Active</option>
@@ -75,7 +104,7 @@ export function CreateProjectDialog() {
                 id="priority"
                 name="priority"
                 defaultValue="Medium"
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0"
               >
                 <option>Low</option>
                 <option>Medium</option>
@@ -110,9 +139,7 @@ export function CreateProjectDialog() {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" className="bg-indigo-600 text-white hover:bg-indigo-700">
-              Create Project
-            </Button>
+            <Button type="submit">Create Project</Button>
           </div>
         </form>
       </DialogContent>

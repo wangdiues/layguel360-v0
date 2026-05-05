@@ -57,15 +57,14 @@ export function AttachmentList({ initialAttachments }: Props) {
   }
 
   return (
-    <Card className="rounded-2xl shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <Upload className="h-4 w-4" />
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0 border-b border-white/[0.08] pb-4">
+        <CardTitle className="flex items-center gap-2 text-base font-semibold">
+          <Upload className="h-4 w-4 text-primary" />
           Attachments ({attachments.length})
         </CardTitle>
         <Button
           variant="outline"
-          className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700"
           onClick={() => inputRef.current?.click()}
           disabled={loading}
         >
@@ -80,7 +79,7 @@ export function AttachmentList({ initialAttachments }: Props) {
         />
       </CardHeader>
 
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-3 p-5">
         {attachments.length === 0 && (
           <p className="py-4 text-center text-sm text-muted-foreground">
             No attachments yet.
@@ -89,22 +88,23 @@ export function AttachmentList({ initialAttachments }: Props) {
 
         {attachments.map((attachment) => {
           const Icon = fileIcon(attachment.filename);
-          const date = new Date(attachment.created_at).toLocaleDateString(
-            "en-GB",
-            { day: "numeric", month: "short", year: "numeric" }
-          );
+          const date = new Date(attachment.created_at).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          });
 
           return (
             <div
               key={attachment.id}
-              className="flex flex-col gap-3 rounded-2xl border bg-background p-4 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-3 rounded-xl border border-white/[0.07] bg-white/[0.04] p-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex items-center gap-3">
-                <div className="rounded-xl bg-indigo-50 p-2 text-indigo-700">
+                <div className="rounded-xl bg-primary/10 p-2 text-primary">
                   <Icon className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="font-medium">{attachment.filename}</p>
+                  <p className="font-medium text-foreground">{attachment.filename}</p>
                   <p className="text-sm text-muted-foreground">
                     {attachment.file_type || "File"} · {attachment.file_size || "—"}
                   </p>
