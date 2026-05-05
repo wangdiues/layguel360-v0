@@ -15,7 +15,7 @@ import {
   User,
   Pencil,
 } from "lucide-react";
-import { mockProjects, mockTasks } from "@/lib/mock-data";
+import { getProject, getTasks } from "@/lib/supabase/queries.server";
 
 export default async function ProjectDetailPage({
   params,
@@ -24,10 +24,13 @@ export default async function ProjectDetailPage({
 }) {
   const { projectId } = await params;
 
-  const project = mockProjects.find((p) => p.id === projectId);
+  const [project, projectTasks] = await Promise.all([
+    getProject(projectId),
+    getTasks(projectId),
+  ]);
+
   if (!project) notFound();
 
-  const projectTasks = mockTasks.filter((t) => t.project_id === projectId);
   const tasksTotal = projectTasks.length;
   const tasksCompleted = projectTasks.filter((t) => t.status === "Completed").length;
   const progress = tasksTotal > 0 ? Math.round((tasksCompleted / tasksTotal) * 100) : 0;
