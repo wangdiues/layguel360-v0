@@ -3,7 +3,10 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { AlertTriangle, RotateCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const buttonClasses =
+  "inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
 export default function GlobalError({
   error,
@@ -33,13 +36,23 @@ export default function GlobalError({
           </p>
         )}
         <div className="mt-6 flex justify-center gap-2">
-          <Button onClick={reset} className="gap-2">
+          <button
+            type="button"
+            onClick={reset}
+            className={cn(buttonClasses, "bg-primary text-primary-foreground hover:bg-primary/90")}
+          >
             <RotateCw className="h-4 w-4" />
             Try again
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/dashboard">Dashboard</Link>
-          </Button>
+          </button>
+          <Link
+            href="/dashboard"
+            className={cn(
+              buttonClasses,
+              "border border-border bg-background hover:bg-muted hover:text-foreground"
+            )}
+          >
+            Dashboard
+          </Link>
         </div>
       </div>
     </div>

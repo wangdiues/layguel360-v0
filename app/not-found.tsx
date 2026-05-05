@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { Compass } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const buttonClasses =
+  "inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
 export default function NotFound() {
   return (
@@ -15,12 +18,21 @@ export default function NotFound() {
           The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
         <div className="mt-6 flex justify-center gap-2">
-          <Button asChild>
-            <Link href="/dashboard">Go to dashboard</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/projects">Browse projects</Link>
-          </Button>
+          <Link
+            href="/dashboard"
+            className={cn(buttonClasses, "bg-primary text-primary-foreground hover:bg-primary/90")}
+          >
+            Go to dashboard
+          </Link>
+          <Link
+            href="/projects"
+            className={cn(
+              buttonClasses,
+              "border border-border bg-background hover:bg-muted hover:text-foreground"
+            )}
+          >
+            Browse projects
+          </Link>
         </div>
       </div>
     </div>
