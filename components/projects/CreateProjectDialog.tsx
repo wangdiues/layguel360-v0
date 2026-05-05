@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Plus } from "lucide-react";
 
+import { createProject } from "@/app/projects/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,41 +16,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-type Project = {
-  id: string;
-  title: string;
-  description: string | null;
-  status: string;
-  priority: string;
-  start_date: string | null;
-  end_date: string | null;
-  department: string | null;
-  manager: string | null;
-};
-
-type Props = {
-  onAdd?: (project: Project) => void;
-};
-
-export function CreateProjectDialog({ onAdd }: Props) {
+export function CreateProjectDialog() {
   const [open, setOpen] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const project: Project = {
-      id: `proj-${Date.now()}`,
-      title: data.get("title") as string,
-      description: (data.get("description") as string) || null,
-      status: data.get("status") as string,
-      priority: data.get("priority") as string,
-      start_date: (data.get("start_date") as string) || null,
-      end_date: (data.get("end_date") as string) || null,
-      department: (data.get("department") as string) || null,
-      manager: null,
-    };
-    onAdd?.(project);
-    setOpen(false);
+    setError(null);
+    const formData = new FormData(e.currentTarget);
+    startTransition(async () => {
+      const result = await createProject(formData);
+      if (result?.ok === false) {
+        setError(result.error);
+        return;
+      }
+      setOpen(false);
+    });
   }
 
   return (
@@ -128,18 +111,30 @@ export function CreateProjectDialog({ onAdd }: Props) {
 
           <div className="space-y-2">
             <Label htmlFor="department">Department</Label>
-            <Input
-              id="department"
-              name="department"
-              placeholder="e.g. Department of Forests"
-            />
+            <Input id="department" name="department" placeholder="e.g. Department of Forests" />
           </div>
 
+          {error && (
+            <p
+              role="alert"
+              className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+            >
+              {error}
+            </p>
+          )}
+
           <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+              disabled={pending}
+            >
               Cancel
             </Button>
-            <Button type="submit">Create Project</Button>
+            <Button type="submit" disabled={pending}>
+              {pending ? "Creating…" : "Create Project"}
+            </Button>
           </div>
         </form>
       </DialogContent>

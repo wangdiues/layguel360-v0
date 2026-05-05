@@ -1,28 +1,13 @@
-"use client";
-
-import { useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { Card, CardContent } from "@/components/ui/card";
 import { CreateProjectDialog } from "@/components/projects/CreateProjectDialog";
 import { ProjectsClient } from "@/components/projects/ProjectsClient";
-import { mockProjects } from "@/lib/mock-data";
-import { FolderKanban, TrendingUp, LayoutList, AlertTriangle } from "lucide-react";
+import { getProjects } from "@/lib/supabase/queries.server";
+import { AlertTriangle, FolderKanban, LayoutList, TrendingUp } from "lucide-react";
 
-type Project = {
-  id: string;
-  title: string;
-  description: string | null;
-  status: string;
-  priority: string;
-  start_date: string | null;
-  end_date: string | null;
-  department: string | null;
-  manager: string | null;
-};
-
-export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>(mockProjects);
+export default async function ProjectsPage() {
+  const projects = await getProjects();
 
   const total = projects.length;
   const active = projects.filter((p) => p.status === "Active").length;
@@ -30,10 +15,6 @@ export default function ProjectsPage() {
   const highPriority = projects.filter(
     (p) => p.priority === "High" || p.priority === "Critical"
   ).length;
-
-  function handleAdd(project: Project) {
-    setProjects((prev) => [project, ...prev]);
-  }
 
   const statCards = [
     {
@@ -78,14 +59,12 @@ export default function ProjectsPage() {
         <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                Projects
-              </h1>
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">Projects</h1>
               <p className="mt-0.5 text-sm text-muted-foreground">
                 Manage project plans, deadlines, priorities, and progress.
               </p>
             </div>
-            <CreateProjectDialog onAdd={handleAdd} />
+            <CreateProjectDialog />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -95,9 +74,7 @@ export default function ProjectsPage() {
                 <Card key={item.label} className={`border-l-4 ${item.border}`}>
                   <CardContent className="flex items-center justify-between p-5">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        {item.label}
-                      </p>
+                      <p className="text-sm font-medium text-muted-foreground">{item.label}</p>
                       <p className="mt-1 text-3xl font-bold tracking-tight text-foreground">
                         {item.value}
                       </p>
