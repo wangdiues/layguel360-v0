@@ -5,7 +5,6 @@ import { Topbar } from "@/components/layout/topbar";
 import { CommentList } from "@/components/comments/CommentList";
 import { AttachmentList } from "@/components/uploads/AttachmentList";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -13,10 +12,15 @@ import {
   ChevronRight,
   FolderKanban,
   User,
-  Pencil,
   Hash,
 } from "lucide-react";
-import { mockTasks, mockProjects, mockComments, mockAttachments } from "@/lib/mock-data";
+import {
+  getAttachments,
+  getComments,
+  getProject,
+  getTask,
+} from "@/lib/supabase/queries.server";
+import { EditTaskDialog } from "@/components/tasks/EditTaskDialog";
 
 export default async function TaskDetailPage({
   params,
@@ -25,12 +29,14 @@ export default async function TaskDetailPage({
 }) {
   const { taskId } = await params;
 
-  const task = mockTasks.find((t) => t.id === taskId);
+  const task = await getTask(taskId);
   if (!task) notFound();
 
-  const project = mockProjects.find((p) => p.id === task.project_id) ?? null;
-  const comments = mockComments[taskId] ?? [];
-  const attachments = mockAttachments[taskId] ?? [];
+  const [project, comments, attachments] = await Promise.all([
+    task.project_id ? getProject(task.project_id) : Promise.resolve(null),
+    getComments(taskId),
+    getAttachments(taskId),
+  ]);
 
   const created = new Date(task.created_at).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -96,10 +102,7 @@ export default async function TaskDetailPage({
                 </p>
               </div>
             </div>
-            <Button variant="outline" className="gap-2 shrink-0">
-              <Pencil className="h-3.5 w-3.5" />
-              Edit Task
-            </Button>
+            <EditTaskDialog task={task} />
           </div>
 
           {/* Main grid */}
@@ -130,8 +133,8 @@ export default async function TaskDetailPage({
                 </CardContent>
               </Card>
 
-              <CommentList initialComments={comments} />
-              <AttachmentList initialAttachments={attachments} />
+              <CommentList taskId={task.id} initialComments={comments} />
+              <AttachmentList taskId={task.id} initialAttachments={attachments} />
             </div>
 
             {/* Summary sidebar */}

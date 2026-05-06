@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { FileArchive, FileSpreadsheet, FileText, Upload } from "lucide-react";
 
+import { uploadAttachment } from "@/app/tasks/[taskId]/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -15,6 +16,7 @@ type Attachment = {
 };
 
 type Props = {
+  taskId: string;
   initialAttachments: Attachment[];
 };
 
@@ -26,34 +28,32 @@ function fileIcon(filename: string) {
   return FileText;
 }
 
-function formatSize(bytes: number) {
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
-}
-
-export function AttachmentList({ initialAttachments }: Props) {
+export function AttachmentList({ taskId, initialAttachments }: Props) {
   const [attachments, setAttachments] = useState<Attachment[]>(initialAttachments);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+
     setLoading(true);
-    setTimeout(() => {
-      setAttachments((prev) => [
-        ...prev,
-        {
-          id: `a-local-${Date.now()}`,
-          filename: file.name,
-          file_type: file.type || "File",
-          file_size: formatSize(file.size),
-          created_at: new Date().toISOString(),
-        },
-      ]);
-      setLoading(false);
-      if (inputRef.current) inputRef.current.value = "";
-    }, 800);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const result = await uploadAttachment(taskId, formData);
+
+    if (!result.ok) {
+      setError(result.error);
+    } else {
+      setAttachments((prev) => [...prev, result.data]);
+    }
+
+    setLoading(false);
+    if (inputRef.current) inputRef.current.value = "";
   }
 
   return (
@@ -80,7 +80,13 @@ export function AttachmentList({ initialAttachments }: Props) {
       </CardHeader>
 
       <CardContent className="space-y-3 p-5">
-        {attachments.length === 0 && (
+        {error && (
+          <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-2 text-sm text-destructive">
+            {error}
+          </p>
+        )}
+
+        {attachments.length === 0 && !error && (
           <p className="py-4 text-center text-sm text-muted-foreground">
             No attachments yet.
           </p>

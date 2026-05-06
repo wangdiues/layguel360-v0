@@ -62,6 +62,18 @@ export type Attachment = {
   created_at: string;
 };
 
+export type Profile = {
+  id: string;
+  name: string;
+  email: string;
+  role: string | null;
+  department: string | null;
+  avatar_url: string | null;
+  bio: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type DashboardStats = {
   totalProjects: number;
   activeProjects: number;
@@ -139,6 +151,55 @@ export async function getAttachments(taskId: string): Promise<Attachment[]> {
 
   if (error) throw error;
   return (data ?? []) as Attachment[];
+}
+
+// ── Profile ────────────────────────────────────────────────────────────────
+
+export type CurrentUserDisplay = {
+  name: string;
+  role: string;
+  email: string;
+  initials: string;
+};
+
+export async function getCurrentUserDisplay(): Promise<CurrentUserDisplay | null> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("name, role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const name: string = profile?.name ?? user.email ?? "Account";
+  const role: string = profile?.role ?? "Member";
+  const email = user.email ?? "";
+  const initials =
+    name
+      .split(/\s+/)
+      .filter((part: string) => part.length > 0)
+      .map((part: string) => part[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "?";
+
+  return { name, role, email, initials };
+}
+
+export async function getProfile(userId: string): Promise<Profile | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return (data ?? null) as Profile | null;
 }
 
 // ── Dashboard ──────────────────────────────────────────────────────────────

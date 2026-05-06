@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -13,9 +12,9 @@ import {
   Circle,
   FolderKanban,
   User,
-  Pencil,
 } from "lucide-react";
 import { getProject, getTasks } from "@/lib/supabase/queries.server";
+import { EditProjectDialog } from "@/components/projects/EditProjectDialog";
 
 export default async function ProjectDetailPage({
   params,
@@ -69,10 +68,7 @@ export default async function ProjectDetailPage({
                 </p>
               </div>
             </div>
-            <Button variant="outline" className="gap-2 shrink-0">
-              <Pencil className="h-3.5 w-3.5" />
-              Edit Project
-            </Button>
+            <EditProjectDialog project={project} />
           </div>
 
           {/* Content grid */}

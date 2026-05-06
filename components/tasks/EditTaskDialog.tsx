@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Pencil } from "lucide-react";
 
-import { createTask } from "@/app/tasks/actions";
+import { updateTask } from "@/app/tasks/[taskId]/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,13 +17,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-type Project = { id: string; title: string };
-
-type Props = {
-  projects: Project[];
+type Task = {
+  id: string;
+  title: string;
+  description: string | null;
+  status: string;
+  priority: string;
+  due_date: string | null;
+  assignee: string | null;
 };
 
-export function CreateTaskDialog({ projects }: Props) {
+type Props = { task: Task };
+
+export function EditTaskDialog({ task }: Props) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -32,11 +40,12 @@ export function CreateTaskDialog({ projects }: Props) {
     setError(null);
     const formData = new FormData(e.currentTarget);
     startTransition(async () => {
-      const result = await createTask(formData);
+      const result = await updateTask(task.id, formData);
       if (result?.ok === false) {
         setError(result.error);
         return;
       }
+      router.refresh();
       setOpen(false);
     });
   }
@@ -44,60 +53,47 @@ export function CreateTaskDialog({ projects }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Create Task
+        <Button variant="outline" className="gap-2 shrink-0">
+          <Pencil className="h-3.5 w-3.5" />
+          Edit Task
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Create Task</DialogTitle>
+          <DialogTitle>Edit Task</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Title *</Label>
-            <Input id="title" name="title" placeholder="Task title" required />
+            <Label htmlFor="et-title">Title *</Label>
+            <Input
+              id="et-title"
+              name="title"
+              defaultValue={task.title}
+              placeholder="Task title"
+              required
+            />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="et-description">Description</Label>
             <Textarea
-              id="description"
+              id="et-description"
               name="description"
+              defaultValue={task.description ?? ""}
               placeholder="Brief description of the task"
               className="resize-none"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="project_id">Project *</Label>
-            <select
-              id="project_id"
-              name="project_id"
-              required
-              defaultValue=""
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0"
-            >
-              <option value="" disabled>
-                Select a project…
-              </option>
-              {projects.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.title}
-                </option>
-              ))}
-            </select>
-          </div>
-
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="et-status">Status</Label>
               <select
-                id="status"
+                id="et-status"
                 name="status"
-                defaultValue="Pending"
+                defaultValue={task.status}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0"
               >
                 <option>Pending</option>
@@ -108,11 +104,11 @@ export function CreateTaskDialog({ projects }: Props) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="priority">Priority</Label>
+              <Label htmlFor="et-priority">Priority</Label>
               <select
-                id="priority"
+                id="et-priority"
                 name="priority"
-                defaultValue="Medium"
+                defaultValue={task.priority}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0"
               >
                 <option>Low</option>
@@ -123,9 +119,26 @@ export function CreateTaskDialog({ projects }: Props) {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="due_date">Due Date</Label>
-            <Input id="due_date" name="due_date" type="date" />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="et-due_date">Due Date</Label>
+              <Input
+                id="et-due_date"
+                name="due_date"
+                type="date"
+                defaultValue={task.due_date ?? ""}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="et-assignee">Assignee</Label>
+              <Input
+                id="et-assignee"
+                name="assignee"
+                defaultValue={task.assignee ?? ""}
+                placeholder="Assignee name"
+              />
+            </div>
           </div>
 
           {error && (
@@ -147,7 +160,7 @@ export function CreateTaskDialog({ projects }: Props) {
               Cancel
             </Button>
             <Button type="submit" disabled={pending}>
-              {pending ? "Creating…" : "Create Task"}
+              {pending ? "Saving…" : "Save Changes"}
             </Button>
           </div>
         </form>

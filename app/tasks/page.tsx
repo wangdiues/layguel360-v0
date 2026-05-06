@@ -1,39 +1,20 @@
-"use client";
-
-import { useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { Card, CardContent } from "@/components/ui/card";
 import { CreateTaskDialog } from "@/components/tasks/CreateTaskDialog";
 import { TasksClient } from "@/components/tasks/TasksClient";
-import { mockTasks, mockProjects } from "@/lib/mock-data";
-import { CheckSquare, Clock, Loader2, CheckCircle2 } from "lucide-react";
+import { getProjects, getTasks } from "@/lib/supabase/queries.server";
+import { CheckCircle2, CheckSquare, Clock, Loader2 } from "lucide-react";
 
-type Task = {
-  id: string;
-  project_id: string;
-  title: string;
-  description: string | null;
-  status: string;
-  priority: string;
-  due_date: string | null;
-  assignee: string | null;
-  created_at: string;
-};
-
-export default function TasksPage() {
-  const [tasks, setTasks] = useState<Task[]>(mockTasks);
+export default async function TasksPage() {
+  const [tasks, projects] = await Promise.all([getTasks(), getProjects()]);
 
   const total = tasks.length;
   const pending = tasks.filter((t) => t.status === "Pending").length;
   const inProgress = tasks.filter((t) => t.status === "In Progress").length;
   const completed = tasks.filter((t) => t.status === "Completed").length;
 
-  const projectList = mockProjects.map((p) => ({ id: p.id, title: p.title }));
-
-  function handleAdd(task: Task) {
-    setTasks((prev) => [task, ...prev]);
-  }
+  const projectList = projects.map((p) => ({ id: p.id, title: p.title }));
 
   const statCards = [
     {
@@ -78,14 +59,12 @@ export default function TasksPage() {
         <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                Tasks
-              </h1>
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">Tasks</h1>
               <p className="mt-0.5 text-sm text-muted-foreground">
                 Track assigned work, deadlines, status, and task priority.
               </p>
             </div>
-            <CreateTaskDialog projects={projectList} onAdd={handleAdd} />
+            <CreateTaskDialog projects={projectList} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -95,9 +74,7 @@ export default function TasksPage() {
                 <Card key={item.label} className={`border-l-4 ${item.border}`}>
                   <CardContent className="flex items-center justify-between p-5">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        {item.label}
-                      </p>
+                      <p className="text-sm font-medium text-muted-foreground">{item.label}</p>
                       <p className="mt-1 text-3xl font-bold tracking-tight text-foreground">
                         {item.value}
                       </p>

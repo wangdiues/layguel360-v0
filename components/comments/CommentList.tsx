@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { MessageSquare } from "lucide-react";
 
+import { postComment } from "@/app/tasks/[taskId]/actions";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,23 +17,27 @@ type Comment = {
 };
 
 type Props = {
+  taskId: string;
   initialComments: Comment[];
 };
 
-export function CommentList({ initialComments }: Props) {
-  const [comments, setComments] = useState<Comment[]>(initialComments);
+export function CommentList({ taskId, initialComments }: Props) {
   const [text, setText] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
   function handlePost() {
-    if (!text.trim()) return;
-    const next: Comment = {
-      id: `c-local-${Date.now()}`,
-      text: text.trim(),
-      created_at: new Date().toISOString(),
-      author: "Karma Wangchuk",
-    };
-    setComments((prev) => [...prev, next]);
-    setText("");
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    setError(null);
+    startTransition(async () => {
+      const result = await postComment(taskId, trimmed);
+      if (result.ok === false) {
+        setError(result.error);
+        return;
+      }
+      setText("");
+    });
   }
 
   return (
@@ -40,19 +45,17 @@ export function CommentList({ initialComments }: Props) {
       <CardHeader className="border-b border-white/[0.08] pb-4">
         <CardTitle className="flex items-center gap-2 text-base font-semibold">
           <MessageSquare className="h-4 w-4 text-primary" />
-          Comments ({comments.length})
+          Comments ({initialComments.length})
         </CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-5 p-5">
-        {comments.length === 0 && (
-          <p className="py-4 text-center text-sm text-muted-foreground">
-            No comments yet.
-          </p>
+        {initialComments.length === 0 && (
+          <p className="py-4 text-center text-sm text-muted-foreground">No comments yet.</p>
         )}
 
         <div className="space-y-4">
-          {comments.map((comment) => {
+          {initialComments.map((comment) => {
             const initials = comment.author
               .split(" ")
               .map((n) => n[0])
@@ -77,9 +80,7 @@ export function CommentList({ initialComments }: Props) {
                     <p className="font-medium text-foreground">{comment.author}</p>
                     <p className="text-xs text-muted-foreground">{date}</p>
                   </div>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    {comment.text}
-                  </p>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{comment.text}</p>
                 </div>
               </div>
             );
@@ -92,10 +93,19 @@ export function CommentList({ initialComments }: Props) {
             className="min-h-24 resize-none"
             value={text}
             onChange={(e) => setText(e.target.value)}
+            disabled={pending}
           />
+          {error && (
+            <p
+              role="alert"
+              className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+            >
+              {error}
+            </p>
+          )}
           <div className="flex justify-end">
-            <Button onClick={handlePost} disabled={!text.trim()}>
-              Post comment
+            <Button onClick={handlePost} disabled={!text.trim() || pending}>
+              {pending ? "Posting…" : "Post comment"}
             </Button>
           </div>
         </div>

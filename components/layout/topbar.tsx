@@ -1,11 +1,19 @@
 import Link from "next/link";
 import { Bell, Search } from "lucide-react";
+
+import { LogoutButton } from "@/components/layout/LogoutButton";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { LogoutButton } from "@/components/layout/LogoutButton";
-import { mockUser } from "@/lib/mock-data";
+import { getCurrentUserDisplay } from "@/lib/supabase/queries.server";
 
-export function Topbar() {
+export async function Topbar() {
+  const user = (await getCurrentUserDisplay()) ?? {
+    name: "Account",
+    role: "Member",
+    email: "",
+    initials: "?",
+  };
+
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-white/[0.08] bg-white/[0.04] px-6 backdrop-blur-md">
       {/* Left spacer */}
@@ -38,16 +46,12 @@ export function Topbar() {
         >
           <Avatar className="h-8 w-8 ring-2 ring-white/10">
             <AvatarFallback className="bg-primary/20 text-primary text-xs font-bold">
-              {mockUser.initials}
+              {user.initials}
             </AvatarFallback>
           </Avatar>
           <div className="hidden sm:block">
-            <p className="text-sm font-semibold leading-tight text-foreground">
-              {mockUser.name}
-            </p>
-            <p className="text-[11px] leading-tight text-muted-foreground">
-              {mockUser.role}
-            </p>
+            <p className="text-sm font-semibold leading-tight text-foreground">{user.name}</p>
+            <p className="text-[11px] leading-tight text-muted-foreground">{user.role}</p>
           </div>
         </Link>
 
