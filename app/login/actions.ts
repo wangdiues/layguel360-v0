@@ -33,17 +33,32 @@ export async function signIn(formData: FormData): Promise<ActionResult<{ redirec
     return fail("Please fix the highlighted fields.", fieldErrors);
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password: password as string,
-  });
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password: password as string,
+    });
 
-  if (error) {
-    return fail(error.message);
+    if (error) {
+      // "Invalid login credentials" → friendlier message
+      if (error.message.toLowerCase().includes("invalid login credentials")) {
+        return fail("Incorrect email or password.");
+      }
+      // "Email not confirmed" — user needs to check inbox
+      if (error.message.toLowerCase().includes("email not confirmed")) {
+        return fail("Please confirm your email before signing in. Check your inbox for the confirmation link.");
+      }
+      return fail(error.message);
+    }
+
+    return { ok: true, data: { redirectTo: safeRedirectTarget(next) } };
+  } catch (err) {
+    console.error("[signIn] unexpected error:", err);
+    return fail(
+      err instanceof Error ? err.message : "Sign-in failed. Please try again.",
+    );
   }
-
-  return { ok: true, data: { redirectTo: safeRedirectTarget(next) } };
 }
 
 export async function signOut(): Promise<never> {
